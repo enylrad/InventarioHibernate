@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-ene-2015 12:08:40 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+ <class catalog="inventario" name="tablas.Componente" table="componente">
+  <id name="cod" type="java.lang.Integer">
+   <column name="cod"/>
+   <generator class="identity"/>
+  </id>
+  <many-to-one class="Tablas.Tipo" fetch="select" name="tipo">
+   <column name="cod_tipo"/>
+  </many-to-one>
+  <property generated="never" lazy="false" name="nombre" type="string">
+   <column length="200" name="nombre"/>
+  </property>
+  <property generated="never" lazy="false" name="precioP" type="java.lang.Double">
+   <column name="precio_p" precision="22" scale="0"/>
+  </property>
+  <property generated="never" lazy="false" name="precioC" type="java.lang.Double">
+   <column name="precio_c" precision="22" scale="0"/>
+  </property>
+  <property generated="never" lazy="false" name="stock" type="java.lang.Integer">
+   <column name="stock"/>
+  </property>
+  <property generated="never" lazy="false" name="descripcion" type="string">
+   <column length="65535" name="descripcion"/>
+  </property>
+  <property generated="never" lazy="false" name="fechaCompra" type="date">
+   <column length="10" name="fecha_compra"/>
+  </property>
+  <property generated="never" lazy="false" name="estado" type="java.lang.Boolean">
+   <column name="estado"/>
+  </property>
+ </class>
+</hibernate-mapping>
