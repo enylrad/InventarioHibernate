@@ -1,26 +1,16 @@
 package main;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.jvnet.substance.*;
 
-import com.mysql.jdbc.Connection;
-
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import java.awt.GridLayout;
-import java.sql.SQLException;
 import javax.swing.JButton;
 
 public class Main extends JFrame {
@@ -54,11 +44,15 @@ public class Main extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
+		contentPane.setLayout(null);
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.setBounds(319, 171, 89, 23);
+		contentPane.add(btnNewButton);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultLookAndFeelDecorated(true);
-		SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessSkin");
+		SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessBlackSteelSkin");
 		
 	}
 }
