@@ -1,6 +1,6 @@
 package tablas;
 
-// Generated 22-ene-2015 12:08:40 by Hibernate Tools 3.4.0.CR1
+// Generated 22-ene-2015 17:40:52 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -18,12 +18,14 @@ public class Componente implements java.io.Serializable {
 	private String descripcion;
 	private Date fechaCompra;
 	private Boolean estado;
+	private String foto;
 
 	public Componente() {
 	}
 
 	public Componente(Tipo tipo, String nombre, Double precioP, Double precioC,
-			Integer stock, String descripcion, Date fechaCompra, Boolean estado) {
+			Integer stock, String descripcion, Date fechaCompra,
+			Boolean estado, String foto) {
 		this.tipo = tipo;
 		this.nombre = nombre;
 		this.precioP = precioP;
@@ -32,6 +34,7 @@ public class Componente implements java.io.Serializable {
 		this.descripcion = descripcion;
 		this.fechaCompra = fechaCompra;
 		this.estado = estado;
+		this.foto = foto;
 	}
 
 	public Integer getCod() {
@@ -104,6 +107,14 @@ public class Componente implements java.io.Serializable {
 
 	public void setEstado(Boolean estado) {
 		this.estado = estado;
+	}
+
+	public String getFoto() {
+		return this.foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 }

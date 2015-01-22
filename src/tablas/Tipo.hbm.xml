@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-ene-2015 12:08:40 by Hibernate Tools 3.4.0.CR1 -->
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-ene-2015 17:40:52 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
- <class catalog="inventario" name="tablas.Tipo" table="tipo">
-  <id name="cod" type="java.lang.Integer">
-   <column name="cod"/>
-   <generator class="identity"/>
-  </id>
-  <property generated="never" lazy="false" name="nombre" type="string">
-   <column length="100" name="nombre"/>
-  </property>
-  <set fetch="select" inverse="true" lazy="true" name="componentes"
-   sort="unsorted" table="componente">
-   <key>
-    <column name="cod_tipo"/>
-   </key>
-   <one-to-many class="Tablas.Componente"/>
-  </set>
- </class>
+    <class name="tablas.Tipo" table="tipo" catalog="inventario">
+        <id name="cod" type="java.lang.Integer">
+            <column name="cod" />
+            <generator class="identity" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="100" />
+        </property>
+        <set name="componentes" table="componente" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_tipo" />
+            </key>
+            <one-to-many class="tablas.Componente" />
+        </set>
+    </class>
 </hibernate-mapping>

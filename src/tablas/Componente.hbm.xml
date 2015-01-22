@@ -1,36 +1,39 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-ene-2015 12:08:40 by Hibernate Tools 3.4.0.CR1 -->
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-ene-2015 17:40:52 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
- <class catalog="inventario" name="tablas.Componente" table="componente">
-  <id name="cod" type="java.lang.Integer">
-   <column name="cod"/>
-   <generator class="identity"/>
-  </id>
-  <many-to-one class="Tablas.Tipo" fetch="select" name="tipo">
-   <column name="cod_tipo"/>
-  </many-to-one>
-  <property generated="never" lazy="false" name="nombre" type="string">
-   <column length="200" name="nombre"/>
-  </property>
-  <property generated="never" lazy="false" name="precioP" type="java.lang.Double">
-   <column name="precio_p" precision="22" scale="0"/>
-  </property>
-  <property generated="never" lazy="false" name="precioC" type="java.lang.Double">
-   <column name="precio_c" precision="22" scale="0"/>
-  </property>
-  <property generated="never" lazy="false" name="stock" type="java.lang.Integer">
-   <column name="stock"/>
-  </property>
-  <property generated="never" lazy="false" name="descripcion" type="string">
-   <column length="65535" name="descripcion"/>
-  </property>
-  <property generated="never" lazy="false" name="fechaCompra" type="date">
-   <column length="10" name="fecha_compra"/>
-  </property>
-  <property generated="never" lazy="false" name="estado" type="java.lang.Boolean">
-   <column name="estado"/>
-  </property>
- </class>
+    <class name="tablas.Componente" table="componente" catalog="inventario">
+        <id name="cod" type="java.lang.Integer">
+            <column name="cod" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="tipo" class="tablas.Tipo" fetch="select">
+            <column name="cod_tipo" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="200" />
+        </property>
+        <property name="precioP" type="java.lang.Double">
+            <column name="precio_p" precision="22" scale="0" />
+        </property>
+        <property name="precioC" type="java.lang.Double">
+            <column name="precio_c" precision="22" scale="0" />
+        </property>
+        <property name="stock" type="java.lang.Integer">
+            <column name="stock" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="65535" />
+        </property>
+        <property name="fechaCompra" type="date">
+            <column name="fecha_compra" length="10" />
+        </property>
+        <property name="estado" type="java.lang.Boolean">
+            <column name="estado" />
+        </property>
+        <property name="foto" type="string">
+            <column name="foto" length="300" />
+        </property>
+    </class>
 </hibernate-mapping>
