@@ -11,7 +11,7 @@
         <property name="hibernate.connection.username">inventario</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.search.autoregister_listeners">false</property>
-        <mapping resource="Tablas/Componente.hbm.xml" />
-        <mapping resource="Tablas/Tipo.hbm.xml" />
+        <mapping resource="tablas/Componente.hbm.xml" />
+        <mapping resource="tablas/Tipo.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

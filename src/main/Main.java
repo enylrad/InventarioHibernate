@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import java.awt.GridLayout;
 import java.sql.SQLException;
+import javax.swing.JButton;
 
 public class Main extends JFrame {
 
@@ -53,13 +54,11 @@ public class Main extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultLookAndFeelDecorated(true);
-		SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.ModerateSkin");
+		SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessSkin");
 		
 	}
-	
-
-
 }
