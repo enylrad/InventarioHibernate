@@ -1,17 +1,7 @@
 package main;
 
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.border.TitledBorder;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import java.awt.Insets;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import java.awt.Component;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Dimension;
+
 
 
 

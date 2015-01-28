@@ -9,18 +9,13 @@ import javax.swing.border.EmptyBorder;
 
 import org.jvnet.substance.*;
 
-import com.mysql.jdbc.Connection;
-
 import javax.swing.JTextField;
 
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
-
 public class Main extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
 
 	/**
 	 * Launch the application.

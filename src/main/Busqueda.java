@@ -7,7 +7,9 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
@@ -18,6 +20,7 @@ import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Component;
 
 
 
@@ -32,18 +35,23 @@ public class Busqueda extends JPanel {
 	private JButton btn_actualizar;
 	private JButton btn_eliminar;
 	private JButton btn_detalles;
-	private JTextField textField;
-	private JComboBox comboBox;
+	private JTextField text_busqueda;
+	private JComboBox combo_tipo;
 	private JButton btn_salir;
 	private DefaultTableModel modelo;
 	private JTable table;
+	
+	private String[] tipos;
+	private JButton btnNewButton;
+	private JPanel panel_buscar;
+	private JPanel panel_tipo;
 	
 	/**
 	 * Create the panel.
 	 */
 	public Busqueda() {
 		setBounds(100, 100, 1097, 613);
-setLayout(new BorderLayout(0, 0));
+		setLayout(new BorderLayout(0, 0));
 		
 		busqueda = new JPanel();
 		add(busqueda, BorderLayout.NORTH);
@@ -54,19 +62,42 @@ setLayout(new BorderLayout(0, 0));
 		busqueda.add(busca, BorderLayout.CENTER);
 		busca.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		textField = new JTextField();
-		busca.add(textField);
-		textField.setColumns(10);
+		text_busqueda = new JTextField();
+		busca.add(text_busqueda);
+		text_busqueda.setColumns(10);
 		
 		tipo = new JPanel();
-		tipo.setBorder(new TitledBorder(null, "Tipo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		busqueda.add(tipo, BorderLayout.EAST);
-		tipo.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		comboBox = new JComboBox();
-		tipo.add(comboBox);
+		tipos = Consultas.buscarTipos();
+		tipo.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		panel_tipo = new JPanel();
+		panel_tipo.setBorder(new TitledBorder(null, "Tipo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		tipo.add(panel_tipo);
+		panel_tipo.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		combo_tipo = new JComboBox(tipos);
+		panel_tipo.add(combo_tipo);
+		
+		panel_buscar = new JPanel();
+		tipo.add(panel_buscar);
+		panel_buscar.setLayout(null);
+		
+		btnNewButton = new JButton("Buscar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				mostrarTabla();
+				
+			}
+		});
+		btnNewButton.setBounds(15, 10, 70, 25);
+		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel_buscar.add(btnNewButton);
 		
 		resultados = new JPanel();
+		resultados.setLayout(new GridLayout(0, 1));
 		add(resultados, BorderLayout.CENTER);
 		
 		botones = new JPanel();
@@ -127,10 +158,15 @@ setLayout(new BorderLayout(0, 0));
 		gbc_btn_salir.gridx = 1;
 		gbc_btn_salir.gridy = 11;
 		botones.add(btn_salir, gbc_btn_salir);
+		
+		mostrarTabla();
 	}
 	
 	public void mostrarTabla() {
-
+		
+		modelo = null;
+		table = null;
+		
 		modelo = new DefaultTableModel();
 		table = new JTable();
 
@@ -144,29 +180,10 @@ setLayout(new BorderLayout(0, 0));
 		modelo.addColumn("Precio al publico");
 		modelo.addColumn("Precio de compra");
 		modelo.addColumn("Stock");
-		modelo.addColumn("Departamento");
-/*
-		TicketUtil tickets_bus = new TicketUtil();
-		ArrayList<Ticket> tickets = null;
-		ids_table.removeAll(ids_table);
+		modelo.addColumn("Fecha de compra");
+		modelo.addColumn("Subtipo");
 
-	
-
-
-		for (int i = 0; i < tickets.size(); i++) {
-
-			Object[] fila = new Object[6];
-			ticket = tickets.get(i);
-			fila[0] = ticket.getId();
-			fila[1] = ticket.getEstado();
-			fila[2] = ticket.getFecha_apert();
-			fila[3] = ticket.getFecha_cerr();
-			fila[4] = usuario.getNombre();
-			fila[5] = usuario.getDepartament();
-
-			modelo.addRow(fila);
-
-		}
+		Consultas.buscar(modelo, text_busqueda, combo_tipo);
 
 		// Para que no se puedan modificar los campos
 		for (int j = 0; j < table.getColumnCount(); j++) {
@@ -176,14 +193,11 @@ setLayout(new BorderLayout(0, 0));
 
 		}
 
+		resultados.removeAll();
 		
+		resultados.add(new JScrollPane(table), BorderLayout.CENTER);
 
-		panel_central.removeAll();
-
-		panel_central.add(new JScrollPane(table), BorderLayout.CENTER);
-
-		SwingUtilities.updateComponentTreeUI(panel_central);
-*/
+		SwingUtilities.updateComponentTreeUI(this);
 
 	}
 
