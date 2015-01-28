@@ -4,17 +4,21 @@ import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
+import org.jdesktop.swingx.JXDatePicker;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.GridLayout;
 
 
 public class Agregar extends JPanel {
-	private JTextField textField;
 
 	/**
 	 * Create the panel.
@@ -47,21 +51,15 @@ public class Agregar extends JPanel {
 		lblFecha.setBounds(30, 155, 100, 14);
 		add(lblFecha);
 		
-		textField = new JTextField();
-		textField.setBounds(123, 152, 107, 20);
-		add(textField);
-		textField.setColumns(10);
+		JPanel panel = new JPanel();
+		panel.setBounds(130, 147, 106, 22);
+		add(panel);
+		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				DatePicker date = new DatePicker();
-			}
-		});
-		btnNewButton.setBounds(253, 151, 89, 23);
-		add(btnNewButton);
-		
+		JXDatePicker picker = new JXDatePicker();
+	    picker.setDate(Calendar.getInstance().getTime());
+	    picker.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+	    panel.add(picker);
 		
 		
 	}
