@@ -28,10 +28,14 @@ public class Consultas {
 		
 		if(busqueda.getText().equals("")){	
 			texto_busqueda="%";	
+		}else{
+			texto_busqueda = busqueda.getText();
 		}
 		
 		if(tipo.getSelectedItem().toString().equals("Todos")){	
 			texto_tipo="%";	
+		}else{
+			texto_tipo=tipo.getSelectedItem().toString();
 		}
 		
 		Query cons = sesion.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
@@ -45,12 +49,10 @@ public class Consultas {
 		
 		while(iter.hasNext()){
 
-			System.out.println("hola");
 			Object[] tablas = (Object[]) iter.next();
 			Componente comp = (Componente) tablas[0];
 			
 			if(comp.getEstado()){
-				
 				Object[] fila = new Object[7];
 				fila[0] = comp.getCod();
 				fila[1] = comp.getNombre();
@@ -59,7 +61,6 @@ public class Consultas {
 				fila[4] = comp.getStock();
 				fila[5] = comp.getFechaCompra();
 				fila[6] = comp.getSubtipo().getNombre();
-	
 				modelo.addRow(fila);
 				
 			}

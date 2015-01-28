@@ -110,6 +110,18 @@ public class Busqueda extends JPanel {
 		botones.setLayout(gbl_botones);
 		
 		btn_agregar = new JButton("A\u00F1adir");
+		btn_agregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				removeAll();
+				Agregar a = new Agregar();
+				a.setVisible(true);
+				add(a);
+				
+				SwingUtilities.updateComponentTreeUI(a);
+				
+			}
+		});
 		GridBagConstraints gbc_btn_agregar = new GridBagConstraints();
 		gbc_btn_agregar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btn_agregar.insets = new Insets(0, 0, 5, 5);
