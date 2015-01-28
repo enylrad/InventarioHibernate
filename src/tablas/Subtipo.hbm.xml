@@ -3,19 +3,22 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 28-ene-2015 15:41:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="tablas.Tipo" table="tipo" catalog="inventario">
+    <class name="tablas.Subtipo" table="subtipo" catalog="inventario">
         <id name="cod" type="java.lang.Integer">
             <column name="cod" />
             <generator class="identity" />
         </id>
+        <many-to-one name="tipo" class="tablas.Tipo" fetch="select">
+            <column name="cod_tipo" />
+        </many-to-one>
         <property name="nombre" type="string">
             <column name="nombre" length="100" />
         </property>
-        <set name="subtipos" table="subtipo" inverse="true" lazy="true" fetch="select">
+        <set name="componentes" table="componente" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="cod_tipo" />
+                <column name="cod_subtipo" />
             </key>
-            <one-to-many class="tablas.Subtipo" />
+            <one-to-many class="tablas.Componente" />
         </set>
     </class>
 </hibernate-mapping>

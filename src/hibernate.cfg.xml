@@ -13,5 +13,6 @@
         <property name="hibernate.search.autoregister_listeners">false</property>
         <mapping resource="tablas/Componente.hbm.xml" />
         <mapping resource="tablas/Tipo.hbm.xml" />
+        <mapping resource="tablas/Subtipo.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

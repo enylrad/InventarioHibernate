@@ -1,6 +1,6 @@
 package tablas;
 
-// Generated 22-ene-2015 17:40:52 by Hibernate Tools 3.4.0.CR1
+// Generated 28-ene-2015 15:41:03 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,14 +12,14 @@ public class Tipo implements java.io.Serializable {
 
 	private Integer cod;
 	private String nombre;
-	private Set<Componente> componentes = new HashSet<Componente>(0);
+	private Set<Subtipo> subtipos = new HashSet<Subtipo>(0);
 
 	public Tipo() {
 	}
 
-	public Tipo(String nombre, Set<Componente> componentes) {
+	public Tipo(String nombre, Set<Subtipo> subtipos) {
 		this.nombre = nombre;
-		this.componentes = componentes;
+		this.subtipos = subtipos;
 	}
 
 	public Integer getCod() {
@@ -38,12 +38,12 @@ public class Tipo implements java.io.Serializable {
 		this.nombre = nombre;
 	}
 
-	public Set<Componente> getComponentes() {
-		return this.componentes;
+	public Set<Subtipo> getSubtipos() {
+		return this.subtipos;
 	}
 
-	public void setComponentes(Set<Componente> componentes) {
-		this.componentes = componentes;
+	public void setSubtipos(Set<Subtipo> subtipos) {
+		this.subtipos = subtipos;
 	}
 
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-ene-2015 17:40:52 by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated 28-ene-2015 15:41:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="tablas.Componente" table="componente" catalog="inventario">
         <id name="cod" type="java.lang.Integer">
             <column name="cod" />
             <generator class="identity" />
         </id>
-        <many-to-one name="tipo" class="tablas.Tipo" fetch="select">
-            <column name="cod_tipo" />
+        <many-to-one name="subtipo" class="tablas.Subtipo" fetch="select">
+            <column name="cod_subtipo" />
         </many-to-one>
         <property name="nombre" type="string">
             <column name="nombre" length="200" />

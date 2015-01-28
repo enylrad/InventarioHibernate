@@ -2,6 +2,7 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-catalog="inventario" match-name="componente" />
-	<table-filter match-catalog="inventario" match-name="tipo" />
+	<table-filter match-name="componente" match-catalog="inventario"></table-filter>
+	<table-filter match-name="subtipo" match-catalog="inventario"></table-filter>
+	<table-filter match-name="tipo" match-catalog="inventario"></table-filter>
 </hibernate-reverse-engineering>
