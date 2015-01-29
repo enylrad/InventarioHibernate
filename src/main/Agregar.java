@@ -1,15 +1,17 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import java.awt.BorderLayout;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -21,30 +23,31 @@ import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 import java.awt.GridLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
-
-import java.awt.Color;
-import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class Agregar extends JPanel {
-	private JTextField textField;
+	private JTextField txt_nombre;
 	private String[] tipos;
 	private String[] subtipos;
 	private JPanel contentPane;
-	private JButton btnImg;
-	
+	private JButton img_prod;
+	private JTextArea txt_desc;
+	private JSpinner spin_stock;
+    private JSpinner spin_compra;
+    private JSpinner spin_precioP;
+    private JXDatePicker picker;
+    private String foto = "D:\\Google Drive\\DAM\\Segundo\\Acceso a Datos\\Practicas Hechas\\InventarioHibernate\\anadir.png";
+	private JComboBox combo_tipo;
+	private JComboBox combo_subtipo;
+    
 	/**
 	 * Create the panel.
 	 * @param contentPane 
@@ -83,18 +86,18 @@ public class Agregar extends JPanel {
 		add(panel_fecha);
 		panel_fecha.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JXDatePicker picker = new JXDatePicker();
+		picker = new JXDatePicker();
 	    picker.setDate(Calendar.getInstance().getTime());
-	    picker.setFormats(new SimpleDateFormat("dd-MM-yyyy"));
+	    picker.setFormats(new SimpleDateFormat("yyyy-MM-dd"));
 	    panel_fecha.add(picker);
 	    
 	    tipos = Consultas.buscarTipos(false);
-	    JComboBox combo_tipo = new JComboBox(tipos);
+	    combo_tipo = new JComboBox(tipos);
 	    combo_tipo.setBounds(461, 27, 265, 20);
 	    add(combo_tipo);
 	    
 	    subtipos = Consultas.buscarSubTipos();
-	    JComboBox combo_subtipo = new JComboBox(subtipos);
+	    combo_subtipo = new JComboBox(subtipos);
 	    combo_subtipo.setBounds(461, 77, 265, 20);
 	    add(combo_subtipo);
 	    
@@ -112,34 +115,34 @@ public class Agregar extends JPanel {
 	    panel_text.setLayout(new GridLayout(0, 1, 0, 0));
 	    
 
-	    JTextArea descrip = new JTextArea ();
-	    descrip.setBounds(140, 354, 259, 96);
-	    descrip.setEditable(true);
-	    JScrollPane scroll = new JScrollPane (descrip);
+	    txt_desc = new JTextArea ();
+	    txt_desc.setBounds(140, 354, 259, 96);
+	    txt_desc.setEditable(true);
+	    JScrollPane scroll = new JScrollPane (txt_desc);
 	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 	    //Add Textarea in to middle panel
 	    panel_text.add ( scroll );
 	    
-	    JSpinner spinner_stock = new JSpinner(new SpinnerNumberModel(0, 0, 5000, 1));
-	    spinner_stock.setBounds(140, 410, 106, 20);
-	    add(spinner_stock);
+	    spin_stock = new JSpinner(new SpinnerNumberModel(0, 0, 5000, 1));
+	    spin_stock.setBounds(140, 410, 106, 20);
+	    add(spin_stock);
 	    
-	    JSpinner spinner_compra = new JSpinner(new SpinnerNumberModel(100.0, 0.0, 10000.0, 0.1));
-	    spinner_compra.setBounds(140, 370, 106, 20);
-	    add(spinner_compra);
+	    spin_compra = new JSpinner(new SpinnerNumberModel(100.0, 0.0, 10000.0, 0.1));
+	    spin_compra.setBounds(140, 370, 106, 20);
+	    add(spin_compra);
 	    
-	    JSpinner spinner_precioP = new JSpinner(new SpinnerNumberModel(100.0, 0.0, 10000.0, 0.1));
-	    spinner_precioP.setBounds(140, 330, 106, 20);
-	    add(spinner_precioP);
+	    spin_precioP = new JSpinner(new SpinnerNumberModel(100.0, 0.0, 10000.0, 0.1));
+	    spin_precioP.setBounds(140, 330, 106, 20);
+	    add(spin_precioP);
 	    
-	    textField = new JTextField();
-	    textField.setBounds(140, 290, 259, 20);
-	    add(textField);
-	    textField.setColumns(10);
+	    txt_nombre = new JTextField();
+	    txt_nombre.setBounds(140, 290, 259, 20);
+	    add(txt_nombre);
+	    txt_nombre.setColumns(10);
 	    
-	    btnImg = new JButton("");
-	    btnImg.addActionListener(new ActionListener() {
+	    img_prod = new JButton("");
+	    img_prod.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		
 	    		JFileChooser filechooser= new JFileChooser();
@@ -151,24 +154,54 @@ public class Agregar extends JPanel {
 	    	    filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	    	    int returnval = filechooser.showOpenDialog(null);
 	    	    if(returnval == JFileChooser.APPROVE_OPTION){
-	    	    	btnImg.setIcon(new ImageIcon(filechooser.getCurrentDirectory() + "\\" + filechooser.getSelectedFile().getName()));
+	    	    	foto = filechooser.getCurrentDirectory() + "\\" + filechooser.getSelectedFile().getName();
+	    	    	img_prod.setIcon(new ImageIcon(foto));
 	    	    }
 	    	    
 	    	}
 	    	
 	    });
-	    btnImg.setBounds(86, 27, 200, 200);
-	    add(btnImg);
-	    btnImg.setIcon(new ImageIcon("D:\\Google Drive\\DAM\\Segundo\\Acceso a Datos\\Practicas Hechas\\InventarioHibernate\\anadir.png"));
-	    btnImg.setBackground(UIManager.getColor("Button.light"));
-	    btnImg.setBorderPainted(false);
-	    btnImg.setBorder(null);
+	    img_prod.setBounds(86, 27, 200, 200);
+	    add(img_prod);
+	    img_prod.setIcon(new ImageIcon(foto));
+	    img_prod.setBackground(UIManager.getColor("Button.light"));
+	    img_prod.setBorderPainted(false);
+	    img_prod.setBorder(null);
 	    
 	    JLabel lbl_foto = new JLabel("Foto");
 	    lbl_foto.setBounds(30, 30, 46, 14);
 	    add(lbl_foto);
 	    
 	    JButton btn_añadir = new JButton("A\u00F1adir");
+	    btn_añadir.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		
+	    		if(comprobacionesVacio()){
+	    			
+	    			String nombre = txt_nombre.getText();
+	    			Double precio_p = (Double) spin_precioP.getValue();
+	    			Double precio_c = (Double) spin_compra.getValue();
+	    			int stock = (Integer) spin_stock.getValue();
+	    			String desc = txt_desc.getText();
+	    			int sub_tipo = combo_subtipo.getSelectedIndex();
+	    			
+	    			
+
+	    			
+	    			
+	    
+				            
+				            
+	    			
+	    			//Consultas.añadirComponente(nombre, precio_p, precio_c, stock, desc, fecha_compra, foto, sub_tipo);
+	    			JOptionPane.showMessageDialog(null, "Se ha añadido el componente a la base de datos.", "Guardado", JOptionPane.INFORMATION_MESSAGE);
+	    			
+	    			volverBusqueda();
+	    			
+	    		}
+	    		
+	    	}
+	    });
 	    btn_añadir.setBounds(637, 469, 89, 23);
 	    add(btn_añadir);
 	    
@@ -176,7 +209,7 @@ public class Agregar extends JPanel {
 	    btnCancelar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		
-	    		volverBusqueda();
+	    		
 	    		
 	    	}
 	    });
@@ -193,6 +226,27 @@ public class Agregar extends JPanel {
 		this.contentPane.add(b);
 		
 		SwingUtilities.updateComponentTreeUI(b);
+		
+	}
+	
+	public boolean comprobacionesVacio(){
+		
+		ArrayList<String> campos = new ArrayList<>();
+		
+		if(txt_nombre.getText().equals("")){
+			campos.add("nombre");
+		}
+		
+		if(txt_desc.getText().equals("")){
+			campos.add("descripción");
+		}
+		
+		if(campos.size() > 0 && campos != null){
+			JOptionPane.showMessageDialog(null, "Los siguientes campos no pueden estar vacios: " + campos.toString(), "¡Atención!", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		
+		return true;
 		
 	}
 }

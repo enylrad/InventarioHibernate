@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+
 import tablas.Componente;
 import tablas.SessionFactoryUtil;
 import tablas.Subtipo;
@@ -19,6 +21,12 @@ import tablas.Tipo;
 
 public class Consultas {
 	
+	/**
+	 * Metodo para filtrar datos en el JTable
+	 * @param modelo
+	 * @param busqueda
+	 * @param tipo
+	 */
 	public static void buscar(DefaultTableModel modelo, JTextField busqueda, JComboBox<String> tipo){
 		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
@@ -71,6 +79,11 @@ public class Consultas {
 		
 	}
 	
+	/**
+	 * Metodo para buscar los tipos en la base de datos
+	 * @param todos Si es true añadirá "Todos" en la lista
+	 * @return
+	 */
 	public static String[] buscarTipos(Boolean todos){
 		
 		ArrayList<String> array_tipos = new ArrayList<>();
@@ -110,6 +123,10 @@ public class Consultas {
 		
 	}
 	
+	/**
+	 * Metodo para buscar los tipos en la base de datos
+	 * @return
+	 */
 	public static String[] buscarSubTipos(){
 		
 		ArrayList<String> array_tipos = new ArrayList<>();
@@ -142,6 +159,57 @@ public class Consultas {
 		}
 		
 		return tipos;
+		
+	}
+	
+	/**
+	 * Metodo para añadir un componente a la base de datos
+	 */
+	public static void añadirComponente(String nombre, Double precio_p, Double precio_c, int stock, String desc, Date fecha_compra, String foto, int sub_tipo){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession(); 
+		org.hibernate.Transaction trans = sesion.beginTransaction();
+		
+		Componente c = new Componente();
+		c.setNombre(nombre);
+		c.setPrecioP(precio_p);
+		c.setPrecioC(precio_c);
+		c.setStock(stock);
+		c.setEstado(true);
+		c.setDescripcion(desc);
+		c.setFechaCompra(fecha_compra);
+		c.setFoto(foto);
+		
+		Subtipo subtipo = buscarTipo(sub_tipo);
+		c.setSubtipo(subtipo);
+		sesion.save(c);
+		trans.commit();		
+		sesion.close();
+		
+	}
+	
+	public static Subtipo buscarTipo(int id){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+		
+		Subtipo subtipo = new Subtipo();
+		
+		Query cons = sesion.createQuery("FROM Subtipo "
+										+ "WHERE cod = " + id);
+		
+		List<Subtipo> filas = cons.list();	
+		Iterator<Subtipo> iter = filas.iterator();
+		
+		while(iter.hasNext()){
+			
+			subtipo = (Subtipo) iter.next();
+			return subtipo;
+			
+		}
+		
+		return subtipo;
 		
 	}
 	
