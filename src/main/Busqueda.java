@@ -21,6 +21,9 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 
 
@@ -45,13 +48,16 @@ public class Busqueda extends JPanel {
 	private JButton btnNewButton;
 	private JPanel panel_buscar;
 	private JPanel panel_tipo;
+	private JPanel contentPane;
 	
 	/**
 	 * Create the panel.
+	 * @param contentPane 
 	 */
-	public Busqueda() {
-		setBounds(100, 100, 1097, 613);
+	public Busqueda(JPanel contentPane) {
+		setBounds(100, 100, 900, 540);
 		setLayout(new BorderLayout(0, 0));
+		this.contentPane = contentPane;
 		
 		busqueda = new JPanel();
 		add(busqueda, BorderLayout.NORTH);
@@ -68,8 +74,6 @@ public class Busqueda extends JPanel {
 		
 		tipo = new JPanel();
 		busqueda.add(tipo, BorderLayout.EAST);
-		
-		tipos = Consultas.buscarTipos();
 		tipo.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		panel_tipo = new JPanel();
@@ -77,14 +81,16 @@ public class Busqueda extends JPanel {
 		tipo.add(panel_tipo);
 		panel_tipo.setLayout(new GridLayout(0, 1, 0, 0));
 		
+		tipos = Consultas.buscarTipos(true);
+		
 		combo_tipo = new JComboBox(tipos);
 		panel_tipo.add(combo_tipo);
 		
 		panel_buscar = new JPanel();
 		tipo.add(panel_buscar);
-		panel_buscar.setLayout(null);
 		
 		btnNewButton = new JButton("Buscar");
+		btnNewButton.setBounds(0, 11, 65, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -92,7 +98,7 @@ public class Busqueda extends JPanel {
 				
 			}
 		});
-		btnNewButton.setBounds(15, 10, 70, 25);
+		panel_buscar.setLayout(null);
 		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_buscar.add(btnNewButton);
 		
@@ -113,12 +119,7 @@ public class Busqueda extends JPanel {
 		btn_agregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				removeAll();
-				Agregar a = new Agregar();
-				a.setVisible(true);
-				add(a);
-				
-				SwingUtilities.updateComponentTreeUI(a);
+				cargarAgregar();
 				
 			}
 		});
@@ -211,6 +212,17 @@ public class Busqueda extends JPanel {
 
 		SwingUtilities.updateComponentTreeUI(this);
 
+	}
+	
+	public void cargarAgregar(){
+		
+		this.contentPane.removeAll();
+		Agregar a = new Agregar(this.contentPane);
+		a.setVisible(true);
+		this.contentPane.add(a);
+		
+		SwingUtilities.updateComponentTreeUI(a);
+	
 	}
 
 }

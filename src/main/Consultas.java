@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 
 import tablas.Componente;
 import tablas.SessionFactoryUtil;
+import tablas.Subtipo;
 import tablas.Tipo;
 
 public class Consultas {
@@ -39,19 +40,18 @@ public class Consultas {
 		}
 		
 		Query cons = sesion.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
-									  + "WHERE c.subtipo.cod = st.id "
-									  + "AND st.tipo.cod = t.cod "
+									  + "WHERE c.subtipo = st.cod "
+									  + "AND st.tipo = t.cod "
 									  + "AND t.nombre LIKE '%" + texto_tipo + "%' "
 									  + "AND c.nombre LIKE '%" + texto_busqueda + "%'");
 		
-		List<Object> filas = cons.list();	
+		List<Object> filas = cons.list();
 		Iterator<Object> iter = filas.iterator();
 		
 		while(iter.hasNext()){
 
 			Object[] tablas = (Object[]) iter.next();
 			Componente comp = (Componente) tablas[0];
-			
 			if(comp.getEstado()){
 				Object[] fila = new Object[7];
 				fila[0] = comp.getCod();
@@ -62,7 +62,6 @@ public class Consultas {
 				fila[5] = comp.getFechaCompra();
 				fila[6] = comp.getSubtipo().getNombre();
 				modelo.addRow(fila);
-				
 			}
 			
 		}
@@ -72,7 +71,7 @@ public class Consultas {
 		
 	}
 	
-	public static String[] buscarTipos(){
+	public static String[] buscarTipos(Boolean todos){
 		
 		ArrayList<String> array_tipos = new ArrayList<>();
 		
@@ -85,13 +84,50 @@ public class Consultas {
 		List<Object> filas = cons.list();	
 		Iterator<Object> iter = filas.iterator();
 		
-		array_tipos.add("Todos");
+		if(todos){
+			array_tipos.add("Todos");
+		}
 		
 		while(iter.hasNext()){
 			
 			Tipo t = (Tipo) iter.next();
 			
 			array_tipos.add(t.getNombre());
+		
+		}
+
+		sesion.close();
+
+		String[] tipos = new String[array_tipos.size()];
+		
+		for(int i=0; i<array_tipos.size(); i++){
+			
+			tipos[i] = array_tipos.get(i);
+			
+		}
+		
+		return tipos;
+		
+	}
+	
+	public static String[] buscarSubTipos(){
+		
+		ArrayList<String> array_tipos = new ArrayList<>();
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+
+		Query cons = sesion.createQuery("FROM Subtipo");
+		
+	
+		List<Object> filas = cons.list();	
+		Iterator<Object> iter = filas.iterator();
+		
+		while(iter.hasNext()){
+			
+			Subtipo st = (Subtipo) iter.next();
+			
+			array_tipos.add(st.getNombre());
 		
 		}
 

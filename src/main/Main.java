@@ -39,7 +39,7 @@ public class Main extends JFrame {
 	public Main() {
 		setTitle("Gestor de inventario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1097, 613);
+		setBounds(100, 100, 900, 540);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -49,7 +49,7 @@ public class Main extends JFrame {
 		setDefaultLookAndFeelDecorated(true);
 		SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessBlackSteelSkin");
 		
-		Busqueda b = new Busqueda();
+		Busqueda b = new Busqueda(contentPane);
 		b.setVisible(true);
 		contentPane.add(b);
 		
