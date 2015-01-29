@@ -23,6 +23,14 @@ import java.awt.event.ActionEvent;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.util.Date;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -36,7 +44,7 @@ public class Busqueda extends JPanel {
 	private JPanel botones;
 	private JPanel busca;
 	private JButton btn_agregar;
-	private JButton btn_actualizar;
+	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_detalles;
 	private JTextField text_busqueda;
@@ -148,33 +156,18 @@ public class Busqueda extends JPanel {
 		gbc_btn_agregar.gridy = 1;
 		botones.add(btn_agregar, gbc_btn_agregar);
 		
-		btn_actualizar = new JButton("Actualizar");
-		btn_actualizar.setEnabled(false);
-		GridBagConstraints gbc_btn_actualizar = new GridBagConstraints();
-		gbc_btn_actualizar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_actualizar.insets = new Insets(0, 0, 5, 5);
-		gbc_btn_actualizar.gridx = 1;
-		gbc_btn_actualizar.gridy = 3;
-		botones.add(btn_actualizar, gbc_btn_actualizar);
-		
-		btn_eliminar = new JButton("Eliminar");
-		btn_eliminar.setEnabled(false);
-		GridBagConstraints gbc_btn_eliminar = new GridBagConstraints();
-		gbc_btn_eliminar.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_eliminar.anchor = GridBagConstraints.SOUTH;
-		gbc_btn_eliminar.insets = new Insets(0, 0, 5, 5);
-		gbc_btn_eliminar.gridx = 1;
-		gbc_btn_eliminar.gridy = 5;
-		botones.add(btn_eliminar, gbc_btn_eliminar);
-		
-		btn_detalles = new JButton("Detalles");
-		btn_detalles.setEnabled(false);
-		GridBagConstraints gbc_btn_detalles = new GridBagConstraints();
-		gbc_btn_detalles.insets = new Insets(0, 0, 5, 5);
-		gbc_btn_detalles.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn_detalles.gridx = 1;
-		gbc_btn_detalles.gridy = 7;
-		botones.add(btn_detalles, gbc_btn_detalles);
+		btn_modificar = new JButton("Modificar");
+		btn_modificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_modificar.setEnabled(false);
+		GridBagConstraints gbc_btn_modificar = new GridBagConstraints();
+		gbc_btn_modificar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btn_modificar.insets = new Insets(0, 0, 5, 5);
+		gbc_btn_modificar.gridx = 1;
+		gbc_btn_modificar.gridy = 3;
+		botones.add(btn_modificar, gbc_btn_modificar);
 		
 		btn_salir = new JButton("Salir");
 		btn_salir.addActionListener(new ActionListener() {
@@ -182,6 +175,33 @@ public class Busqueda extends JPanel {
 				System.exit(1);
 			}
 		});
+		
+		btn_detalles = new JButton("Detalles");
+		btn_detalles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_detalles.setEnabled(false);
+		GridBagConstraints gbc_btn_detalles = new GridBagConstraints();
+		gbc_btn_detalles.insets = new Insets(0, 0, 5, 5);
+		gbc_btn_detalles.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btn_detalles.gridx = 1;
+		gbc_btn_detalles.gridy = 5;
+		botones.add(btn_detalles, gbc_btn_detalles);
+		
+		btn_eliminar = new JButton("Eliminar");
+		btn_eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_eliminar.setEnabled(false);
+		GridBagConstraints gbc_btn_eliminar = new GridBagConstraints();
+		gbc_btn_eliminar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btn_eliminar.anchor = GridBagConstraints.SOUTH;
+		gbc_btn_eliminar.insets = new Insets(0, 0, 5, 5);
+		gbc_btn_eliminar.gridx = 1;
+		gbc_btn_eliminar.gridy = 10;
+		botones.add(btn_eliminar, gbc_btn_eliminar);
 		GridBagConstraints gbc_btn_salir = new GridBagConstraints();
 		gbc_btn_salir.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btn_salir.anchor = GridBagConstraints.SOUTH;
@@ -224,12 +244,39 @@ public class Busqueda extends JPanel {
 
 		}
 
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				confBotonesHabilitados();
+
+			}
+		});
+		
 		resultados.removeAll();
 		
 		resultados.add(new JScrollPane(table), BorderLayout.CENTER);
 
 		SwingUtilities.updateComponentTreeUI(this);
 
+	}
+	
+	public void confBotonesHabilitados(){
+		
+		if (table.getSelectedRow() != -1) {
+
+			btn_modificar.setEnabled(true);
+			btn_eliminar.setEnabled(true);
+			btn_detalles.setEnabled(true);
+
+		} else {
+
+			btn_modificar.setEnabled(false);
+			btn_eliminar.setEnabled(false);
+			btn_detalles.setEnabled(false);
+
+		}
+		
 	}
 	
 	public void cargarAgregar(){

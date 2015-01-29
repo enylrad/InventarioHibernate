@@ -2,7 +2,7 @@ package main;
 
 import javax.swing.JPanel;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,9 +31,12 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.JSpinner;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 
 public class Agregar extends JPanel {
+	
 	private JTextField txt_nombre;
 	private String[] tipos;
 	private String[] subtipos;
@@ -93,19 +96,41 @@ public class Agregar extends JPanel {
 	    
 	    tipos = Consultas.buscarTipos(false);
 	    combo_tipo = new JComboBox(tipos);
+	    combo_tipo.addItemListener(new ItemListener() {
+	    	public void itemStateChanged(ItemEvent e) {
+	    		subtipos = Consultas.buscarSubTipos(combo_tipo.getSelectedItem().toString());
+	    		combo_subtipo.removeAllItems();
+	    		
+	    		for(int i=0; i<subtipos.length; i++){
+	    			combo_subtipo.addItem(subtipos[i].toString());
+	    		}
+	    		
+	    	}
+	    });
 	    combo_tipo.setBounds(461, 27, 265, 20);
 	    add(combo_tipo);
 	    
-	    subtipos = Consultas.buscarSubTipos();
+	    subtipos = Consultas.buscarSubTipos(combo_tipo.getSelectedItem().toString());
 	    combo_subtipo = new JComboBox(subtipos);
 	    combo_subtipo.setBounds(461, 77, 265, 20);
 	    add(combo_subtipo);
 	    
 	    JButton btntipo_nuevo = new JButton("Nuevo");
+	    btntipo_nuevo.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		
+	    		JOptionPane.showInputDialog("Introduce el nuevo tipo de componentes");
+	    		
+	    	}
+	    });
 	    btntipo_nuevo.setBounds(736, 26, 89, 23);
 	    add(btntipo_nuevo);
 	    
 	    JButton btnsubtipo_nuevo = new JButton("Nuevo");
+	    btnsubtipo_nuevo.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    	}
+	    });
 	    btnsubtipo_nuevo.setBounds(736, 76, 89, 23);
 	    add(btnsubtipo_nuevo);
 	    
@@ -183,20 +208,24 @@ public class Agregar extends JPanel {
 	    			Double precio_c = (Double) spin_compra.getValue();
 	    			int stock = (Integer) spin_stock.getValue();
 	    			String desc = txt_desc.getText();
-	    			int sub_tipo = combo_subtipo.getSelectedIndex();
+	    			String sub_tipo = combo_subtipo.getSelectedItem().toString();   			
 	    			
-	    			
-
-	    			
-	    			
-	    
-				            
-				            
-	    			
-	    			//Consultas.añadirComponente(nombre, precio_p, precio_c, stock, desc, fecha_compra, foto, sub_tipo);
+	    			Date fecha = (Date) picker.getDate();
+	    			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	    			String fecha_compra = formatter.format(fecha);
+	    			try {
+						Consultas.añadirComponente(nombre, precio_p, precio_c, stock, desc, fecha_compra, foto, sub_tipo);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	    			JOptionPane.showMessageDialog(null, "Se ha añadido el componente a la base de datos.", "Guardado", JOptionPane.INFORMATION_MESSAGE);
 	    			
 	    			volverBusqueda();
+	    			
+	    		}else{
+	    			
+	    			JOptionPane.showMessageDialog(null, "Se deben rellenar todos los campos", "¡Atención!", JOptionPane.WARNING_MESSAGE);
 	    			
 	    		}
 	    		
@@ -208,7 +237,19 @@ public class Agregar extends JPanel {
 	    JButton btnCancelar = new JButton("Cancelar");
 	    btnCancelar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		
+	    		if(comprobacionesVacio()){
+	    			
+	    			if(0 == JOptionPane.showConfirmDialog(null, "¿Esta usted seguro? ya ha intruducido datos y estos no se guardaran", null, JOptionPane.WARNING_MESSAGE)){
+	    				
+	    				volverBusqueda();
+	    				
+	    			}
+	    			
+	    		}else{
+	    			
+	    			volverBusqueda();
+	    			
+	    		}
 	    		
 	    		
 	    	}
@@ -231,19 +272,10 @@ public class Agregar extends JPanel {
 	
 	public boolean comprobacionesVacio(){
 		
-		ArrayList<String> campos = new ArrayList<>();
-		
-		if(txt_nombre.getText().equals("")){
-			campos.add("nombre");
-		}
-		
-		if(txt_desc.getText().equals("")){
-			campos.add("descripción");
-		}
-		
-		if(campos.size() > 0 && campos != null){
-			JOptionPane.showMessageDialog(null, "Los siguientes campos no pueden estar vacios: " + campos.toString(), "¡Atención!", JOptionPane.WARNING_MESSAGE);
+		if(txt_nombre.getText().equals("") || txt_desc.getText().equals("")){
+			
 			return false;
+			
 		}
 		
 		return true;

@@ -1,7 +1,9 @@
 package main;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +14,8 @@ import javax.swing.table.DefaultTableModel;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
+
 
 
 import tablas.Componente;
@@ -127,14 +131,15 @@ public class Consultas {
 	 * Metodo para buscar los tipos en la base de datos
 	 * @return
 	 */
-	public static String[] buscarSubTipos(){
+	public static String[] buscarSubTipos(String tipo){
 		
 		ArrayList<String> array_tipos = new ArrayList<>();
 		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
 
-		Query cons = sesion.createQuery("FROM Subtipo");
+		Query cons = sesion.createQuery("FROM Subtipo "
+										+ "WHERE tipo.nombre LIKE '" + tipo + "'");
 		
 	
 		List<Object> filas = cons.list();	
@@ -150,26 +155,29 @@ public class Consultas {
 
 		sesion.close();
 
-		String[] tipos = new String[array_tipos.size()];
+		String[] subtipos = new String[array_tipos.size()];
 		
 		for(int i=0; i<array_tipos.size(); i++){
 			
-			tipos[i] = array_tipos.get(i);
+			subtipos[i] = array_tipos.get(i);
 			
 		}
 		
-		return tipos;
+		return subtipos;
 		
 	}
 	
 	/**
 	 * Metodo para añadir un componente a la base de datos
+	 * @throws ParseException 
 	 */
-	public static void añadirComponente(String nombre, Double precio_p, Double precio_c, int stock, String desc, Date fecha_compra, String foto, int sub_tipo){
+	public static void añadirComponente(String nombre, Double precio_p, Double precio_c, int stock, String desc, String fecha_compra, String foto, String sub_tipo) throws ParseException{
 		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession(); 
 		org.hibernate.Transaction trans = sesion.beginTransaction();
+		
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Componente c = new Componente();
 		c.setNombre(nombre);
@@ -178,7 +186,7 @@ public class Consultas {
 		c.setStock(stock);
 		c.setEstado(true);
 		c.setDescripcion(desc);
-		c.setFechaCompra(fecha_compra);
+		c.setFechaCompra((Date) formato.parse(fecha_compra));
 		c.setFoto(foto);
 		
 		Subtipo subtipo = buscarTipo(sub_tipo);
@@ -189,7 +197,7 @@ public class Consultas {
 		
 	}
 	
-	public static Subtipo buscarTipo(int id){
+	public static Subtipo buscarTipo(String nombre){
 		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
@@ -197,7 +205,7 @@ public class Consultas {
 		Subtipo subtipo = new Subtipo();
 		
 		Query cons = sesion.createQuery("FROM Subtipo "
-										+ "WHERE cod = " + id);
+										+ "WHERE nombre LIKE '" + nombre + "'");
 		
 		List<Subtipo> filas = cons.list();	
 		Iterator<Subtipo> iter = filas.iterator();
