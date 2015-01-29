@@ -33,7 +33,6 @@ public class Busqueda extends JPanel {
 	private JPanel resultados;
 	private JPanel botones;
 	private JPanel busca;
-	private JPanel tipo;
 	private JButton btn_agregar;
 	private JButton btn_actualizar;
 	private JButton btn_eliminar;
@@ -45,7 +44,7 @@ public class Busqueda extends JPanel {
 	private JTable table;
 	
 	private String[] tipos;
-	private JButton btnNewButton;
+	private JButton btnBuscar;
 	private JPanel panel_buscar;
 	private JPanel panel_tipo;
 	private JPanel contentPane;
@@ -59,48 +58,65 @@ public class Busqueda extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		this.contentPane = contentPane;
 		
-		busqueda = new JPanel();
+		tipos = Consultas.buscarTipos(true);
+		
+		busqueda =new JPanel();
 		add(busqueda, BorderLayout.NORTH);
-		busqueda.setLayout(new BorderLayout(0, 0));
+		GridBagLayout gbl_busqueda = new GridBagLayout();
+		gbl_busqueda.columnWidths = new int[] {550, 148, 129};
+		gbl_busqueda.rowHeights = new int[] {43};
+		gbl_busqueda.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_busqueda.rowWeights = new double[]{0.0};
+		busqueda.setLayout(gbl_busqueda);
 		
 		busca = new JPanel();
 		busca.setBorder(new TitledBorder(null, "Busqueda", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		busqueda.add(busca, BorderLayout.CENTER);
+		GridBagConstraints gbc_busca = new GridBagConstraints();
+		gbc_busca.anchor = GridBagConstraints.NORTH;
+		gbc_busca.fill = GridBagConstraints.HORIZONTAL;
+		gbc_busca.insets = new Insets(0, 0, 5, 5);
+		gbc_busca.gridx = 0;
+		gbc_busca.gridy = 0;
+		busqueda.add(busca, gbc_busca);
 		busca.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		text_busqueda = new JTextField();
 		busca.add(text_busqueda);
 		text_busqueda.setColumns(10);
 		
-		tipo = new JPanel();
-		busqueda.add(tipo, BorderLayout.EAST);
-		tipo.setLayout(new GridLayout(0, 2, 0, 0));
-		
 		panel_tipo = new JPanel();
+		GridBagConstraints gbc_panel_tipo = new GridBagConstraints();
+		gbc_panel_tipo.anchor = GridBagConstraints.NORTH;
+		gbc_panel_tipo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_tipo.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_tipo.gridx = 1;
+		gbc_panel_tipo.gridy = 0;
+		busqueda.add(panel_tipo, gbc_panel_tipo);
 		panel_tipo.setBorder(new TitledBorder(null, "Tipo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		tipo.add(panel_tipo);
 		panel_tipo.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		tipos = Consultas.buscarTipos(true);
 		
 		combo_tipo = new JComboBox(tipos);
 		panel_tipo.add(combo_tipo);
 		
 		panel_buscar = new JPanel();
-		tipo.add(panel_buscar);
+		GridBagConstraints gbc_panel_buscar = new GridBagConstraints();
+		gbc_panel_buscar.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_buscar.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_buscar.gridx = 2;
+		gbc_panel_buscar.gridy = 0;
+		busqueda.add(panel_buscar, gbc_panel_buscar);
 		
-		btnNewButton = new JButton("Buscar");
-		btnNewButton.setBounds(0, 11, 65, 23);
-		btnNewButton.addActionListener(new ActionListener() {
+		btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				mostrarTabla();
 				
 			}
 		});
-		panel_buscar.setLayout(null);
-		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_buscar.add(btnNewButton);
+		panel_buscar.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		btnBuscar.setAlignmentX(0.5f);
+		panel_buscar.add(btnBuscar);
 		
 		resultados = new JPanel();
 		resultados.setLayout(new GridLayout(0, 1));
