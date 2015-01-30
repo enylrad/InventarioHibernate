@@ -3,10 +3,8 @@ package main;
 import javax.swing.JPanel;
 
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JFileChooser;
@@ -21,6 +19,8 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import tablas.Componente;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
@@ -31,14 +31,12 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.JSpinner;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.Utilities;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
+public class Modificar extends JPanel {
 
-public class Agregar extends JPanel {
-	
 	private JTextField txt_nombre;
 	private String[] tipos;
 	private String[] subtipos;
@@ -49,7 +47,7 @@ public class Agregar extends JPanel {
     private JSpinner spin_compra;
     private JSpinner spin_precioP;
     private JXDatePicker picker;
-    private String foto = "D:\\Google Drive\\DAM\\Segundo\\Acceso a Datos\\Practicas Hechas\\InventarioHibernate\\anadir.png";
+    private String foto;
 	private JComboBox combo_tipo;
 	private JComboBox combo_subtipo;
     
@@ -57,7 +55,7 @@ public class Agregar extends JPanel {
 	 * Create the panel.
 	 * @param contentPane 
 	 */
-	public Agregar(JPanel contentPane) {
+	public Modificar(Componente comp, JPanel contentPane) {
 		setBounds(100, 100, 900, 540);
 		setLayout(null);
 		this.contentPane=contentPane;
@@ -92,7 +90,7 @@ public class Agregar extends JPanel {
 		panel_fecha.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		picker = new JXDatePicker();
-	    picker.setDate(Calendar.getInstance().getTime());
+	    picker.setDate(comp.getFechaCompra());
 	    picker.setFormats(new SimpleDateFormat("yyyy-MM-dd"));
 	    panel_fecha.add(picker);
 	    
@@ -117,8 +115,8 @@ public class Agregar extends JPanel {
 	    combo_subtipo.setBounds(461, 77, 265, 20);
 	    add(combo_subtipo);
 	    
-	    JButton btntipo_nuevo = new JButton("Nuevo");
-	    btntipo_nuevo.addActionListener(new ActionListener() {
+	    JButton btntipo_editar = new JButton("Editar");
+	    btntipo_editar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		
 	    		try{
@@ -142,11 +140,11 @@ public class Agregar extends JPanel {
 	    		
 	    	}
 	    });
-	    btntipo_nuevo.setBounds(736, 26, 89, 23);
-	    add(btntipo_nuevo);
+	    btntipo_editar.setBounds(736, 26, 89, 23);
+	    add(btntipo_editar);
 	    
-	    JButton btnsubtipo_nuevo = new JButton("Nuevo");
-	    btnsubtipo_nuevo.addActionListener(new ActionListener() {
+	    JButton btnsubtipo_editar = new JButton("Editar");
+	    btnsubtipo_editar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		
 	    		try{
@@ -171,8 +169,8 @@ public class Agregar extends JPanel {
 	    		
 	    	}
 	    });
-	    btnsubtipo_nuevo.setBounds(736, 76, 89, 23);
-	    add(btnsubtipo_nuevo);
+	    btnsubtipo_editar.setBounds(736, 76, 89, 23);
+	    add(btnsubtipo_editar);
 	    
 	    JPanel panel_text = new JPanel();
 	    panel_text.setBounds(571, 292, 259, 96);
@@ -183,6 +181,7 @@ public class Agregar extends JPanel {
 	    txt_desc = new JTextArea ();
 	    txt_desc.setBounds(140, 354, 259, 96);
 	    txt_desc.setEditable(true);
+	    txt_desc.setText(comp.getDescripcion());
 	    JScrollPane scroll = new JScrollPane (txt_desc);
 	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -192,19 +191,23 @@ public class Agregar extends JPanel {
 	    spin_stock = new JSpinner(new SpinnerNumberModel(0, 0, 5000, 1));
 	    spin_stock.setBounds(140, 410, 106, 20);
 	    add(spin_stock);
+	    spin_stock.setValue(comp.getStock());
 	    
 	    spin_compra = new JSpinner(new SpinnerNumberModel(100.0, 0.0, 10000.0, 0.1));
 	    spin_compra.setBounds(140, 370, 106, 20);
 	    add(spin_compra);
+	    spin_compra.setValue(comp.getPrecioC());
 	    
 	    spin_precioP = new JSpinner(new SpinnerNumberModel(100.0, 0.0, 10000.0, 0.1));
 	    spin_precioP.setBounds(140, 330, 106, 20);
 	    add(spin_precioP);
+	    spin_precioP.setValue(comp.getPrecioP());
 	    
 	    txt_nombre = new JTextField();
 	    txt_nombre.setBounds(140, 290, 259, 20);
 	    add(txt_nombre);
 	    txt_nombre.setColumns(10);
+	    txt_nombre.setText(comp.getNombre());
 	    
 	    img_prod = new JButton("");
 	    img_prod.addActionListener(new ActionListener() {
@@ -229,7 +232,12 @@ public class Agregar extends JPanel {
 	    });
 	    img_prod.setBounds(86, 27, 200, 200);
 	    add(img_prod);
-	    img_prod.setIcon(new ImageIcon(foto));
+	    try{
+	    	foto = comp.getFoto();
+	    	img_prod.setIcon(new ImageIcon(foto));
+	    }catch(NullPointerException npe){
+	    	JOptionPane.showMessageDialog(null, "Imagen no encontrada", null, JOptionPane.WARNING_MESSAGE);
+	    }
 	    img_prod.setBackground(UIManager.getColor("Button.light"));
 	    img_prod.setBorderPainted(false);
 	    img_prod.setBorder(null);
@@ -238,7 +246,7 @@ public class Agregar extends JPanel {
 	    lbl_foto.setBounds(30, 30, 46, 14);
 	    add(lbl_foto);
 	    
-	    JButton btn_añadir = new JButton("A\u00F1adir");
+	    JButton btn_añadir = new JButton("Aceptar");
 	    btn_añadir.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		

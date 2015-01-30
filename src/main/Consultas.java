@@ -8,15 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
-
-
+import org.hibernate.Transaction;
 
 import tablas.Componente;
 import tablas.SessionFactoryUtil;
@@ -114,6 +113,7 @@ public class Consultas {
 		}
 
 		sesion.close();
+		sesionF.close();
 
 		String[] tipos = new String[array_tipos.size()];
 		
@@ -154,6 +154,7 @@ public class Consultas {
 		}
 
 		sesion.close();
+		sesionF.close();
 
 		String[] subtipos = new String[array_tipos.size()];
 		
@@ -167,6 +168,7 @@ public class Consultas {
 		
 	}
 	
+	//Esto falla cuando se añade un tipo y subtipo y a la vez se añade componente REVISAR MAS ADELANTE
 	/**
 	 * Metodo para añadir un componente a la base de datos
 	 * @throws ParseException 
@@ -175,7 +177,7 @@ public class Consultas {
 		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession(); 
-		org.hibernate.Transaction trans = sesion.beginTransaction();
+		Transaction trans = sesion.beginTransaction();
 		
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -188,16 +190,24 @@ public class Consultas {
 		c.setDescripcion(desc);
 		c.setFechaCompra((Date) formato.parse(fecha_compra));
 		c.setFoto(foto);
-		
-		Subtipo subtipo = buscarTipo(sub_tipo);
+		System.out.println(sub_tipo);
+		Subtipo subtipo = buscarSubtipo(sub_tipo);
 		c.setSubtipo(subtipo);
+		
 		sesion.save(c);
 		trans.commit();		
 		sesion.close();
+		sesionF.close();
 		
 	}
 	
-	public static Subtipo buscarTipo(String nombre){
+	/**
+	 * Busca un subtipo por el nombre
+	 * @param nombre
+	 * @return
+	 */
+	
+	public static Subtipo buscarSubtipo(String nombre){
 		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
@@ -206,18 +216,180 @@ public class Consultas {
 		
 		Query cons = sesion.createQuery("FROM Subtipo "
 										+ "WHERE nombre LIKE '" + nombre + "'");
-		
+		System.out.println(cons);
 		List<Subtipo> filas = cons.list();	
 		Iterator<Subtipo> iter = filas.iterator();
-		
 		while(iter.hasNext()){
-			
+			System.out.println("hola");
 			subtipo = (Subtipo) iter.next();
-			return subtipo;
+			
+		}
+
+		sesion.close();
+		sesionF.close();
+		return subtipo;
+		
+	}
+	
+	/**
+	 * Añade un tipo a la BBDD
+	 * @param tipo
+	 */
+	public static void añadirTipo(String tipo){
+		
+		if(!comprobarDuplicadosNombreT(tipo)){
+			
+			SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+			Session sesion = sesionF.openSession(); 
+			Transaction trans = sesion.beginTransaction();
+	
+			Tipo t = new Tipo();
+			t.setNombre(tipo);
+		
+			sesion.save(t);
+			trans.commit();		
+			sesion.close();
+			sesionF.close();
+			
+		}else{
+			
+			JOptionPane.showMessageDialog(null, "El nombre ya esta en uso.", null, JOptionPane.WARNING_MESSAGE);
 			
 		}
 		
-		return subtipo;
+	}
+	
+	/**
+	 * Añade un Subtipo a la BBDD
+	 * @param subtipo
+	 * @param tipo
+	 */
+	public static void añadirSubtipo(String subtipo, String tipo){
+		
+		if(!comprobarDuplicadosNombreST(subtipo)){
+			
+			SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+			Session sesion = sesionF.openSession(); 
+			Transaction trans = sesion.beginTransaction();
+	
+			Subtipo st = new Subtipo();
+			st.setNombre(subtipo);
+			
+			Tipo t = Consultas.buscarTipoPorNombre(tipo);
+			
+			st.setTipo(t);
+		
+			sesion.save(st);
+			trans.commit();		
+			sesion.close();
+			sesionF.close();
+			
+		}else{
+			
+			JOptionPane.showMessageDialog(null, "El nombre ya esta en uso.", null, JOptionPane.WARNING_MESSAGE);
+			
+		}
+		
+	}
+	
+	public static Tipo buscarTipoPorNombre(String nombre){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+
+		Query cons = sesion.createQuery("FROM Tipo WHERE nombre LIKE '" + nombre + "'");
+		
+		Tipo t = new Tipo();
+	
+		List<Object> filas = cons.list();	
+		Iterator<Object> iter = filas.iterator();
+		
+		while(iter.hasNext()){
+			
+			t = (Tipo) iter.next();
+		
+		}
+
+		sesion.close();
+		sesionF.close();
+		
+		return t;
+	}
+	
+	public static boolean comprobarDuplicadosNombreT(String nombre){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+
+		Query cons = sesion.createQuery("FROM Tipo WHERE nombre LIKE '" + nombre + "'");
+		
+		Tipo t = new Tipo();
+	
+		List<Object> filas = cons.list();	
+		Iterator<Object> iter = filas.iterator();
+		
+		while(iter.hasNext()){
+			
+			t = (Tipo) iter.next();
+			
+			sesion.close();
+			return true;
+		
+		}
+
+		sesion.close();
+		sesionF.close();
+		return false;
+	}
+	
+	public static boolean comprobarDuplicadosNombreST(String nombre){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+
+		Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '" + nombre + "'");
+		
+		Subtipo st = new Subtipo();
+	
+		List<Object> filas = cons.list();	
+		Iterator<Object> iter = filas.iterator();
+		
+		while(iter.hasNext()){
+			
+			st = (Subtipo) iter.next();
+			
+			sesion.close();
+			return true;
+		
+		}
+
+		sesion.close();
+		sesionF.close();
+		return false;
+	}
+	
+	public static Componente buscarComponente(int id){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+		
+		Componente c = new Componente();
+		
+		Query cons = sesion.createQuery("FROM Componente "
+										+ "WHERE cod = " + id);
+		
+		List<Componente> filas = cons.list();	
+		Iterator<Componente> iter = filas.iterator();
+		
+		while(iter.hasNext()){
+			
+			c = (Componente) iter.next();
+			
+		}
+		
+		sesion.close();
+		sesionF.close();
+		return c;
 		
 	}
 	

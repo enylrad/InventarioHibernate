@@ -35,6 +35,8 @@ import java.awt.event.ItemEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
+import tablas.Componente;
+
 
 
 public class Busqueda extends JPanel {
@@ -159,6 +161,9 @@ public class Busqueda extends JPanel {
 		btn_modificar = new JButton("Modificar");
 		btn_modificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				cargarModificar();
+				
 			}
 		});
 		btn_modificar.setEnabled(false);
@@ -288,6 +293,19 @@ public class Busqueda extends JPanel {
 		
 		SwingUtilities.updateComponentTreeUI(a);
 	
+	}
+	
+	public void cargarModificar(){
+		
+		Componente comp = Consultas.buscarComponente((int) table.getValueAt(table.getSelectedRow(), 0));
+		
+		this.contentPane.removeAll();
+		Modificar m = new Modificar(comp, contentPane);
+		m.setVisible(true);
+		this.contentPane.add(m);
+		
+		SwingUtilities.updateComponentTreeUI(m);
+		
 	}
 
 }
