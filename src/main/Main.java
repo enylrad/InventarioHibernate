@@ -9,8 +9,6 @@ import javax.swing.border.EmptyBorder;
 
 import org.jvnet.substance.*;
 
-import javax.swing.JTextField;
-
 import java.awt.GridLayout;
 
 public class Main extends JFrame {
@@ -47,13 +45,14 @@ public class Main extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultLookAndFeelDecorated(true);
-		SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.BusinessBlackSteelSkin");
-		
+		SubstanceLookAndFeel
+				.setSkin("org.jvnet.substance.skin.BusinessBlackSteelSkin");
+
 		Busqueda b = new Busqueda(contentPane);
 		b.setVisible(true);
 		contentPane.add(b);
-		
+
 		SwingUtilities.updateComponentTreeUI(b);
-		
+
 	}
 }
