@@ -235,16 +235,25 @@ public class Consultas {
 
 		Subtipo subtipo = new Subtipo();
 
-		Query cons = sesion.createQuery("FROM Subtipo " + "WHERE nombre LIKE '"
-				+ nombre + "'");
+		Query cons = sesion.createQuery("FROM Subtipo");
+		//Preguntar pq no funciona
+		//Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '" + nombre +"'");
 
 		List<Subtipo> filas = cons.list();
 		Iterator<Subtipo> iter = filas.iterator();
-
+		
 		while (iter.hasNext()) {
-
+			
 			subtipo = (Subtipo) iter.next();
-
+			
+			if(subtipo.getNombre().equals(nombre)){
+				
+				sesion.close();
+				sesionF.close();
+				
+				return subtipo;
+				
+			}
 		}
 
 		sesion.close();
@@ -374,7 +383,8 @@ public class Consultas {
 			t = (Tipo) iter.next();
 
 			sesion.close();
-
+			sesionF.close();
+			
 			return true;
 
 		}
@@ -409,7 +419,8 @@ public class Consultas {
 			st = (Subtipo) iter.next();
 
 			sesion.close();
-
+			sesionF.close();
+			
 			return true;
 
 		}

@@ -112,9 +112,15 @@ public class Agregar extends JPanel {
 		combo_tipo.setBounds(461, 27, 265, 20);
 		add(combo_tipo);
 
-		subtipos = Consultas.buscarSubTipos(combo_tipo.getSelectedItem()
-				.toString());
-		combo_subtipo = new JComboBox(subtipos);
+		if(combo_tipo.getSelectedItem() != null){
+			
+			subtipos = Consultas.buscarSubTipos(combo_tipo.getSelectedItem()
+					.toString());
+			combo_subtipo = new JComboBox(subtipos);
+			
+		}else{
+			combo_subtipo = new JComboBox<>();
+		}
 		combo_subtipo.setBounds(461, 77, 265, 20);
 		add(combo_subtipo);
 
