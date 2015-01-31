@@ -31,8 +31,7 @@ public class Consultas {
 	 * @param busqueda
 	 * @param tipo
 	 */
-	public static void buscar(DefaultTableModel modelo, JTextField busqueda,
-			JComboBox<String> tipo) {
+	public static void buscar(DefaultTableModel modelo, JTextField busqueda, JComboBox<String> tipo) {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
@@ -60,11 +59,10 @@ public class Consultas {
 
 		}
 
-		Query cons = sesion
-				.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
-						+ "WHERE c.subtipo = st.cod " + "AND st.tipo = t.cod "
-						+ "AND t.nombre LIKE '%" + texto_tipo + "%' "
-						+ "AND c.nombre LIKE '%" + texto_busqueda + "%'");
+		Query cons = sesion.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
+										+ "WHERE c.subtipo = st.cod " + "AND st.tipo = t.cod "
+										+ "AND t.nombre LIKE '%" + texto_tipo + "%' "
+										+ "AND c.nombre LIKE '%" + texto_busqueda + "%'");
 
 		List<Object> filas = cons.list();
 		Iterator<Object> iter = filas.iterator();
@@ -96,8 +94,7 @@ public class Consultas {
 	/**
 	 * Metodo para buscar los tipos en la base de datos
 	 * 
-	 * @param todos
-	 *            Si es true añadirá "Todos" en la lista
+	 * @param todos Si es true añadirá "Todos" en la lista
 	 * @return
 	 */
 	public static String[] buscarTipos(Boolean todos) {
@@ -142,7 +139,7 @@ public class Consultas {
 	}
 
 	/**
-	 * Metodo para buscar los tipos en la base de datos
+	 * Buscar los tipos en la base de datos
 	 * 
 	 * @return
 	 */
@@ -182,8 +179,6 @@ public class Consultas {
 
 	}
 
-	// Esto falla cuando se añade un tipo y subtipo y a la vez se añade
-	// componente REVISAR MAS ADELANTE
 	/**
 	 * Metodo para añadir un componente a la base de datos
 	 * 
@@ -220,6 +215,53 @@ public class Consultas {
 		sesionF.close();
 
 	}
+	
+	/**
+	 * Modifica los valores del componente
+	 * @param id
+	 * @param nombre
+	 * @param precio_p
+	 * @param precio_c
+	 * @param stock
+	 * @param desc
+	 * @param fecha_compra
+	 * @param foto
+	 * @param sub_tipo
+	 * @throws ParseException
+	 */
+	public static void modificarComponente(int id, String nombre, Double precio_p,
+			Double precio_c, int stock, String desc, String fecha_compra,
+			String foto, String sub_tipo) throws ParseException {
+
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+		Transaction trans = sesion.beginTransaction();
+
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+		Componente c = new Componente();
+		c = (Componente) sesion.load(Componente.class, id);
+
+		c.setNombre(nombre);
+		c.setPrecioP(precio_p);
+		c.setPrecioC(precio_c);
+		c.setStock(stock);
+		c.setEstado(true);
+		c.setDescripcion(desc);
+		c.setFechaCompra((Date) formato.parse(fecha_compra));
+		c.setFoto(foto);
+
+		Subtipo subtipo = buscarSubtipo(sub_tipo);
+
+		c.setSubtipo(subtipo);
+
+		sesion.update(c);
+		trans.commit();
+		sesion.close();
+		sesionF.close();
+
+	}
+	
 
 	/**
 	 * Busca un subtipo por el nombre
@@ -358,6 +400,36 @@ public class Consultas {
 
 		return t;
 	}
+	
+	/**
+	 * Buscar subtipo por el nombre
+	 * @param nombre
+	 * @return
+	 */
+	public static Subtipo buscarSubtipoPorNombre(String nombre) {
+
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+
+		Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '"
+				+ nombre + "'");
+
+		Subtipo st = new Subtipo();
+		
+		List<Object> filas = cons.list();
+		Iterator<Object> iter = filas.iterator();
+
+		while (iter.hasNext()) {
+
+			st = (Subtipo) iter.next();
+
+		}
+
+		sesion.close();
+		sesionF.close();
+
+		return st;
+	}
 
 	/**
 	 * Comprueba nombres duplicados en la tabla tipos
@@ -461,6 +533,102 @@ public class Consultas {
 
 		return c;
 
+	}
+	
+	/**
+	 * Modifica el nombre del tipo
+	 * @param tipoact
+	 * @param tipomod
+	 */
+	public static void modificarTipo(String tipoact, String tipomod){
+		if (!comprobarDuplicadosNombreT(tipomod)) {
+			
+			SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+			Session sesion = sesionF.openSession();
+			Transaction trans = sesion.beginTransaction();
+
+			Tipo t = buscarTipoPorNombre(tipoact);
+			
+			t = (Tipo) sesion.load(Tipo.class, t.getCod());
+			
+			t.setNombre(tipomod);
+			
+			sesion.update(t);
+			
+			trans.commit();
+			sesion.close();
+			sesionF.close();
+			
+			JOptionPane.showMessageDialog(null, "Se ha modificado el nombre del tipo", null, JOptionPane.INFORMATION_MESSAGE);
+
+		} else {
+
+			JOptionPane.showMessageDialog(null, "El nombre ya esta en uso.",
+					null, JOptionPane.WARNING_MESSAGE);
+
+		}
+		
+	}
+
+	/**
+	 * Modifica el nombre del subtipo
+	 * @param subtipoact
+	 * @param subtipomod
+	 */
+	public static void modificarSubtipo(String subtipoact, String subtipomod) {
+
+		if (!comprobarDuplicadosNombreT(subtipomod)) {
+
+			SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+			Session sesion = sesionF.openSession();
+			Transaction trans = sesion.beginTransaction();
+
+			Subtipo st = buscarSubtipoPorNombre(subtipoact);
+
+			st = (Subtipo) sesion.load(Subtipo.class, st.getCod());
+
+			st.setNombre(subtipomod);
+
+			sesion.update(st);
+			trans.commit();
+			sesion.close();
+			sesionF.close();
+
+			JOptionPane.showMessageDialog(null,
+					"Se ha modificado el nombre del subtipo", null,
+					JOptionPane.INFORMATION_MESSAGE);
+
+		} else {
+
+			JOptionPane.showMessageDialog(null, "El nombre ya esta en uso.",
+					null, JOptionPane.WARNING_MESSAGE);
+
+		}
+
+	}
+	
+	/**
+	 * Elimina un componente
+	 * @param comp
+	 */
+	public static void eliminarComponente(Componente comp){
+		
+		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
+		Session sesion = sesionF.openSession();
+		Transaction trans = sesion.beginTransaction();
+		
+		comp = (Componente) sesion.load(Componente.class, comp.getCod());
+		
+		
+		sesion.delete(comp);
+		
+		trans.commit();
+		sesion.close();
+		sesionF.close();
+		
+		JOptionPane.showMessageDialog(null, "Se ha eliminado el componente", null, JOptionPane.INFORMATION_MESSAGE);
+
+		
 	}
 
 }

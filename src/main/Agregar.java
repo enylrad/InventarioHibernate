@@ -109,7 +109,7 @@ public class Agregar extends JPanel {
 
 			}
 		});
-		combo_tipo.setBounds(461, 27, 265, 20);
+		combo_tipo.setBounds(401, 27, 265, 20);
 		add(combo_tipo);
 
 		if(combo_tipo.getSelectedItem() != null){
@@ -119,9 +119,11 @@ public class Agregar extends JPanel {
 			combo_subtipo = new JComboBox(subtipos);
 			
 		}else{
+			
 			combo_subtipo = new JComboBox<>();
+			
 		}
-		combo_subtipo.setBounds(461, 77, 265, 20);
+		combo_subtipo.setBounds(401, 77, 265, 20);
 		add(combo_subtipo);
 
 		JButton btntipo_nuevo = new JButton("Nuevo");
@@ -154,7 +156,7 @@ public class Agregar extends JPanel {
 
 			}
 		});
-		btntipo_nuevo.setBounds(736, 26, 89, 23);
+		btntipo_nuevo.setBounds(676, 26, 89, 23);
 		add(btntipo_nuevo);
 
 		JButton btnsubtipo_nuevo = new JButton("Nuevo");
@@ -189,7 +191,7 @@ public class Agregar extends JPanel {
 
 			}
 		});
-		btnsubtipo_nuevo.setBounds(736, 76, 89, 23);
+		btnsubtipo_nuevo.setBounds(676, 76, 89, 23);
 		add(btnsubtipo_nuevo);
 
 		JPanel panel_text = new JPanel();
@@ -254,7 +256,7 @@ public class Agregar extends JPanel {
 		img_prod.setBorderPainted(false);
 		img_prod.setBorder(null);
 
-		JLabel lbl_foto = new JLabel("Foto");
+		JLabel lbl_foto = new JLabel("Foto:");
 		lbl_foto.setBounds(30, 30, 46, 14);
 		add(lbl_foto);
 
@@ -328,6 +330,72 @@ public class Agregar extends JPanel {
 		});
 		btnCancelar.setBounds(736, 469, 89, 23);
 		add(btnCancelar);
+		
+		JButton btn_editar_tipo = new JButton("Editar");
+		btn_editar_tipo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+
+					String tipo = JOptionPane
+							.showInputDialog("Introduce el nuevo nombre que tendrá el tipo: " + combo_tipo.getSelectedItem());
+
+					if (!tipo.equals("")) {
+						
+						Consultas.modificarTipo(combo_tipo.getSelectedItem().toString(), tipo);
+						renovarComboTipo();
+
+					} else {
+
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"No se ha introducido nada, ya que el campo estaba vacio",
+										null, JOptionPane.WARNING_MESSAGE);
+
+					}
+
+				} catch (Exception ex) {
+
+				}
+				
+			}
+		});
+		btn_editar_tipo.setBounds(771, 26, 89, 23);
+		add(btn_editar_tipo);
+		
+		JButton btn_editar_sub = new JButton("Editar");
+		btn_editar_sub.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+
+					String subtipo = JOptionPane
+							.showInputDialog("Introduce el nuevo nombre que tendrá el subtipo: " + combo_subtipo.getSelectedItem() + ".");
+
+					if (!subtipo.equals("")) {
+
+						Consultas.modificarSubtipo(combo_subtipo.getSelectedItem().toString(), subtipo);
+						renovarComboSubTipo();
+
+					} else {
+
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"No se ha introducido nada, ya que el campo estaba vacio",
+										null, JOptionPane.WARNING_MESSAGE);
+
+					}
+
+				} catch (Exception ex) {
+
+				}
+				
+			}
+		});
+		btn_editar_sub.setBounds(771, 76, 89, 23);
+		add(btn_editar_sub);
 
 	}
 

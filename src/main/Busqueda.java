@@ -28,25 +28,33 @@ import tablas.Componente;
 
 public class Busqueda extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2847686935683555437L;
 	private JPanel busqueda;
 	private JPanel resultados;
 	private JPanel botones;
 	private JPanel busca;
+	private JPanel panel_buscar;
+	private JPanel panel_tipo;
+	private JPanel contentPane;
+	
 	private JButton btn_agregar;
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_detalles;
+	private JButton btn_salir;
+	private JButton btnBuscar;
+	
 	private JTextField text_busqueda;
 	private JComboBox combo_tipo;
-	private JButton btn_salir;
-	private DefaultTableModel modelo;
+	
 	private JTable table;
+	private DefaultTableModel modelo;
 
 	private String[] tipos;
-	private JButton btnBuscar;
-	private JPanel panel_buscar;
-	private JPanel panel_tipo;
-	private JPanel contentPane;
+
 
 	/**
 	 * Create the panel.
@@ -54,6 +62,7 @@ public class Busqueda extends JPanel {
 	 * @param contentPane
 	 */
 	public Busqueda(JPanel contentPane) {
+		
 		setBounds(100, 100, 900, 540);
 		setLayout(new BorderLayout(0, 0));
 		this.contentPane = contentPane;
@@ -70,8 +79,7 @@ public class Busqueda extends JPanel {
 		busqueda.setLayout(gbl_busqueda);
 
 		busca = new JPanel();
-		busca.setBorder(new TitledBorder(null, "Busqueda",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		busca.setBorder(new TitledBorder(null, "Busqueda", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_busca = new GridBagConstraints();
 		gbc_busca.anchor = GridBagConstraints.NORTH;
 		gbc_busca.fill = GridBagConstraints.HORIZONTAL;
@@ -128,12 +136,9 @@ public class Busqueda extends JPanel {
 		add(botones, BorderLayout.EAST);
 		GridBagLayout gbl_botones = new GridBagLayout();
 		gbl_botones.columnWidths = new int[] { 30, 0, 30, 0 };
-		gbl_botones.rowHeights = new int[] { 30, 0, 30, 0, 30, 0, 30, 0, 30,
-				30, 30, 100, 30 };
-		gbl_botones.columnWeights = new double[] { 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
-		gbl_botones.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_botones.rowHeights = new int[] { 30, 0, 30, 0, 30, 0, 30, 0, 30, 30, 30, 100, 30 };
+		gbl_botones.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_botones.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		botones.setLayout(gbl_botones);
 
 		btn_agregar = new JButton("A\u00F1adir");
@@ -170,13 +175,18 @@ public class Busqueda extends JPanel {
 		btn_salir = new JButton("Salir");
 		btn_salir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				System.exit(1);
+				
 			}
 		});
 
 		btn_detalles = new JButton("Detalles");
 		btn_detalles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				cargarDetalles();
+
 			}
 		});
 		btn_detalles.setEnabled(false);
@@ -190,22 +200,29 @@ public class Busqueda extends JPanel {
 		btn_eliminar = new JButton("Eliminar");
 		btn_eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				cargarBorrar();
+
 			}
 		});
 		btn_eliminar.setEnabled(false);
+		
 		GridBagConstraints gbc_btn_eliminar = new GridBagConstraints();
 		gbc_btn_eliminar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btn_eliminar.anchor = GridBagConstraints.SOUTH;
 		gbc_btn_eliminar.insets = new Insets(0, 0, 5, 5);
 		gbc_btn_eliminar.gridx = 1;
 		gbc_btn_eliminar.gridy = 10;
+		
 		botones.add(btn_eliminar, gbc_btn_eliminar);
+		
 		GridBagConstraints gbc_btn_salir = new GridBagConstraints();
 		gbc_btn_salir.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btn_salir.anchor = GridBagConstraints.SOUTH;
 		gbc_btn_salir.insets = new Insets(0, 0, 5, 5);
 		gbc_btn_salir.gridx = 1;
 		gbc_btn_salir.gridy = 11;
+		
 		botones.add(btn_salir, gbc_btn_salir);
 
 		mostrarTabla();
@@ -259,6 +276,9 @@ public class Busqueda extends JPanel {
 
 	}
 
+	/**
+	 * Habilita y deshabilita los botones, segun este seleccionado un campo o no
+	 */
 	public void confBotonesHabilitados() {
 
 		if (table.getSelectedRow() != -1) {
@@ -299,6 +319,30 @@ public class Busqueda extends JPanel {
 		this.contentPane.add(m);
 
 		SwingUtilities.updateComponentTreeUI(m);
+
+	}
+
+	public void cargarDetalles() {
+
+		Componente comp = Consultas.buscarComponente((int) table.getValueAt(
+				table.getSelectedRow(), 0));
+
+		this.contentPane.removeAll();
+		Ficha f = new Ficha(comp, contentPane);
+		f.setVisible(true);
+		this.contentPane.add(f);
+
+		SwingUtilities.updateComponentTreeUI(f);
+
+	}
+
+	public void cargarBorrar() {
+
+		Componente comp = Consultas.buscarComponente((int) table.getValueAt(
+				table.getSelectedRow(), 0));
+
+		Consultas.eliminarComponente(comp);
+		mostrarTabla();
 
 	}
 
