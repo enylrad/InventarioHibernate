@@ -48,7 +48,7 @@ public class Agregar extends JPanel {
 	private JSpinner spin_compra;
 	private JSpinner spin_precioP;
 	private JXDatePicker picker;
-	private String foto = "D:\\Google Drive\\DAM\\Segundo\\Acceso a Datos\\Practicas Hechas\\InventarioHibernate\\anadir.png";
+	private String foto = ""; //Insertar imagen deseada
 	private JComboBox combo_tipo;
 	private JComboBox combo_subtipo;
 
