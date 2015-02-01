@@ -6,6 +6,7 @@ Requisitos:
  - Cambio de apariencia - Guia: http://curiotecnology.blogspot.com.es/2012/08/cambiar-la-aparencia-de-un-jframe-java.html
  - Cambio de apariencia - Librerias: http://www.mediafire.com/download/dq2yr8zccqqb4p8/substance-4.3.jar
  - Librerias MySQL
+ - Librerias Hibernate
  
 Enunciado del ejercicio:
  
