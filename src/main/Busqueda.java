@@ -249,7 +249,12 @@ public class Busqueda extends JPanel {
 		modelo.addColumn("Fecha de compra");
 		modelo.addColumn("Subtipo");
 
-		Consultas.buscar(modelo, text_busqueda, combo_tipo);
+		try{
+			Integer.parseInt(text_busqueda.getText());
+			Consultas.buscar(modelo, text_busqueda, combo_tipo, true);
+		}catch(NumberFormatException n){
+			Consultas.buscar(modelo, text_busqueda, combo_tipo, false);
+		}
 
 		// Para que no se puedan modificar los campos
 		for (int j = 0; j < table.getColumnCount(); j++) {

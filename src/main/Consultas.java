@@ -31,7 +31,7 @@ public class Consultas {
 	 * @param busqueda
 	 * @param tipo
 	 */
-	public static void buscar(DefaultTableModel modelo, JTextField busqueda, JComboBox<String> tipo) {
+	public static void buscar(DefaultTableModel modelo, JTextField busqueda, JComboBox<String> tipo, boolean numero) {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
@@ -59,10 +59,20 @@ public class Consultas {
 
 		}
 
-		Query cons = sesion.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
-										+ "WHERE c.subtipo = st.cod " + "AND st.tipo = t.cod "
-										+ "AND t.nombre LIKE '%" + texto_tipo + "%' "
-										+ "AND c.nombre LIKE '%" + texto_busqueda + "%'");
+		Query cons = null;
+		
+		if(numero){
+			cons = sesion.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
+											+ "WHERE c.subtipo = st.cod " + "AND st.tipo = t.cod "
+											+ "AND t.nombre LIKE '%" + texto_tipo + "%' "
+											+ "AND c.cod = " + texto_busqueda);
+		
+		}else{
+			cons = sesion.createQuery("FROM Componente AS c, Subtipo AS st, Tipo AS t "
+											+ "WHERE c.subtipo = st.cod " + "AND st.tipo = t.cod "
+											+ "AND t.nombre LIKE '%" + texto_tipo + "%' "
+											+ "AND c.nombre LIKE '%" + texto_busqueda + "%'");
+		}
 
 		List<Object> filas = cons.list();
 		Iterator<Object> iter = filas.iterator();
