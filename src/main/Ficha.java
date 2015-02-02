@@ -1,12 +1,9 @@
 package main;
 import javax.swing.JPanel;
 
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-import javax.swing.JFileChooser;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -29,7 +26,6 @@ import javax.swing.JTextArea;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.JSpinner;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;

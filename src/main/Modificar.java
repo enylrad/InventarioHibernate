@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
