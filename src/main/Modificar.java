@@ -51,6 +51,8 @@ public class Modificar extends JPanel {
 	private JComboBox combo_tipo;
 	private JComboBox combo_subtipo;
 	private int id_mod;
+	private JButton btntipo_editar;
+	private JButton btnsubtipo_editar;
 
 	/**
 	 * Create the panel.
@@ -120,7 +122,7 @@ public class Modificar extends JPanel {
 		combo_subtipo.setBounds(400, 77, 265, 20);
 		add(combo_subtipo);
 
-		JButton btntipo_editar = new JButton("Cambiar Nombre");
+		btntipo_editar = new JButton("Cambiar Nombre");
 		btntipo_editar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -151,9 +153,16 @@ public class Modificar extends JPanel {
 			}
 		});
 		btntipo_editar.setBounds(770, 26, 89, 23);
+		
+		if(combo_tipo.getSelectedItem() == null){
+			btntipo_editar.setEnabled(false);
+		}else{
+			btntipo_editar.setEnabled(true);
+		}
+		
 		add(btntipo_editar);
 
-		JButton btnsubtipo_editar = new JButton("Cambiar Nombre");
+		btnsubtipo_editar = new JButton("Cambiar Nombre");
 		btnsubtipo_editar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -184,6 +193,13 @@ public class Modificar extends JPanel {
 			}
 		});
 		btnsubtipo_editar.setBounds(770, 76, 89, 23);
+		
+		if(combo_subtipo.getSelectedItem() == null){
+			btnsubtipo_editar.setEnabled(false);
+		}else{
+			btnsubtipo_editar.setEnabled(true);
+		}
+		
 		add(btnsubtipo_editar);
 
 		JPanel panel_text = new JPanel();
@@ -265,15 +281,15 @@ public class Modificar extends JPanel {
 		lbl_foto.setBounds(30, 30, 46, 14);
 		add(lbl_foto);
 
-		JButton btn_añadir = new JButton("Aceptar");
-		btn_añadir.addActionListener(new ActionListener() {
+		JButton btn_anyadir = new JButton("Aceptar");
+		btn_anyadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				cargarModificarComponente();
 			}
 		});
-		btn_añadir.setBounds(637, 469, 89, 23);
-		add(btn_añadir);
+		btn_anyadir.setBounds(637, 469, 89, 23);
+		add(btn_anyadir);
 
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
@@ -297,7 +313,7 @@ public class Modificar extends JPanel {
 
 					if (!tipo.equals("")) {
 
-						Consultas.añadirTipo(tipo);
+						Consultas.anyadirTipo(tipo);
 						renovarComboTipo();
 
 					} else {
@@ -317,6 +333,9 @@ public class Modificar extends JPanel {
 			}
 		});
 		btn_nuevo_tipo.setBounds(675, 26, 89, 23);
+		
+		
+		
 		add(btn_nuevo_tipo);
 		
 		JButton btn_nuevo_sub = new JButton("Nuevo");
@@ -331,7 +350,7 @@ public class Modificar extends JPanel {
 
 					if (!subtipo.equals("")) {
 
-						Consultas.añadirSubtipo(subtipo, combo_tipo
+						Consultas.anyadirSubtipo(subtipo, combo_tipo
 								.getSelectedItem().toString());
 						renovarComboSubTipo();
 
@@ -389,6 +408,12 @@ public class Modificar extends JPanel {
 		for (int i = 0; i < tipos.length; i++) {
 			combo_tipo.addItem(tipos[i].toString());
 		}
+		
+		if(combo_tipo.getSelectedItem() == null){
+			btntipo_editar.setEnabled(false);
+		}else{
+			btntipo_editar.setEnabled(true);
+		}
 
 	}
 
@@ -400,6 +425,12 @@ public class Modificar extends JPanel {
 
 		for (int i = 0; i < subtipos.length; i++) {
 			combo_subtipo.addItem(subtipos[i].toString());
+		}
+		
+		if(combo_tipo.getSelectedItem() == null){
+			btnsubtipo_editar.setEnabled(false);
+		}else{
+			btnsubtipo_editar.setEnabled(true);
 		}
 
 	}

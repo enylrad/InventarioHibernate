@@ -11,7 +11,7 @@
         <property name="nombre" type="string">
             <column name="nombre" length="100" />
         </property>
-        <set name="subtipos" table="subtipo" inverse="true" lazy="true" fetch="select">
+        <set name="subtipos" cascade="all" table="subtipo" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="cod_tipo" />
             </key>

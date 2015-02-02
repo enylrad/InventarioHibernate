@@ -97,14 +97,13 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 	}
 
 	/**
 	 * Metodo para buscar los tipos en la base de datos
 	 * 
-	 * @param todos Si es true añadirá "Todos" en la lista
+	 * @param todos Si es true anyadirá "Todos" en la lista
 	 * @return
 	 */
 	public static String[] buscarTipos(Boolean todos) {
@@ -134,7 +133,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		String[] tipos = new String[array_tipos.size()];
 
@@ -175,7 +173,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		String[] subtipos = new String[array_tipos.size()];
 
@@ -190,13 +187,15 @@ public class Consultas {
 	}
 
 	/**
-	 * Metodo para añadir un componente a la base de datos
+	 * Metodo para anyadir un componente a la base de datos
 	 * 
 	 * @throws ParseException
 	 */
-	public static void añadirComponente(String nombre, Double precio_p,
+	public static void anyadirComponente(String nombre, Double precio_p,
 			Double precio_c, int stock, String desc, String fecha_compra,
 			String foto, String sub_tipo) throws ParseException {
+		
+		Subtipo subtipo = buscarSubtipo(sub_tipo);
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
@@ -206,6 +205,7 @@ public class Consultas {
 
 		Componente c = new Componente();
 
+		
 		c.setNombre(nombre);
 		c.setPrecioP(precio_p);
 		c.setPrecioC(precio_c);
@@ -215,14 +215,12 @@ public class Consultas {
 		c.setFechaCompra((Date) formato.parse(fecha_compra));
 		c.setFoto(foto);
 
-		Subtipo subtipo = buscarSubtipo(sub_tipo);
-
 		c.setSubtipo(subtipo);
-
+		
+		sesion.update(subtipo);
 		sesion.save(c);
 		trans.commit();
 		sesion.close();
-		sesionF.close();
 
 	}
 	
@@ -243,6 +241,8 @@ public class Consultas {
 			Double precio_c, int stock, String desc, String fecha_compra,
 			String foto, String sub_tipo) throws ParseException {
 
+		Subtipo subtipo = buscarSubtipo(sub_tipo);
+		
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
 		Transaction trans = sesion.beginTransaction();
@@ -261,14 +261,13 @@ public class Consultas {
 		c.setFechaCompra((Date) formato.parse(fecha_compra));
 		c.setFoto(foto);
 
-		Subtipo subtipo = buscarSubtipo(sub_tipo);
-
+		
+		
 		c.setSubtipo(subtipo);
 
 		sesion.update(c);
 		trans.commit();
 		sesion.close();
-		sesionF.close();
 
 	}
 	
@@ -287,9 +286,7 @@ public class Consultas {
 
 		Subtipo subtipo = new Subtipo();
 
-		Query cons = sesion.createQuery("FROM Subtipo");
-		//Preguntar pq no funciona
-		//Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '" + nombre +"'");
+		Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '" + nombre +"'");
 
 		List<Subtipo> filas = cons.list();
 		Iterator<Subtipo> iter = filas.iterator();
@@ -298,28 +295,19 @@ public class Consultas {
 			
 			subtipo = (Subtipo) iter.next();
 			
-			if(subtipo.getNombre().equals(nombre)){
-				
-				sesion.close();
-				sesionF.close();
-				
-				return subtipo;
-				
-			}
 		}
 
 		sesion.close();
-		sesionF.close();
 		return subtipo;
 
 	}
 
 	/**
-	 * Añade un tipo a la BBDD
+	 * Anyade un tipo a la BBDD
 	 * 
 	 * @param tipo
 	 */
-	public static void añadirTipo(String tipo) {
+	public static void anyadirTipo(String tipo) {
 
 		if (!comprobarDuplicadosNombreT(tipo)) {
 
@@ -334,7 +322,6 @@ public class Consultas {
 			sesion.save(t);
 			trans.commit();
 			sesion.close();
-			sesionF.close();
 
 		} else {
 
@@ -346,12 +333,12 @@ public class Consultas {
 	}
 
 	/**
-	 * Añade un Subtipo a la BBDD
+	 * Anyade un Subtipo a la BBDD
 	 * 
 	 * @param subtipo
 	 * @param tipo
 	 */
-	public static void añadirSubtipo(String subtipo, String tipo) {
+	public static void anyadirSubtipo(String subtipo, String tipo) {
 
 		if (!comprobarDuplicadosNombreST(subtipo)) {
 
@@ -366,10 +353,10 @@ public class Consultas {
 
 			st.setTipo(t);
 
+			sesion.update(t);
 			sesion.save(st);
 			trans.commit();
 			sesion.close();
-			sesionF.close();
 
 		} else {
 
@@ -406,7 +393,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		return t;
 	}
@@ -436,7 +422,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		return st;
 	}
@@ -472,7 +457,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		return false;
 	}
@@ -508,7 +492,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		return false;
 	}
@@ -539,7 +522,6 @@ public class Consultas {
 		}
 
 		sesion.close();
-		sesionF.close();
 
 		return c;
 
@@ -567,7 +549,6 @@ public class Consultas {
 			
 			trans.commit();
 			sesion.close();
-			sesionF.close();
 			
 			JOptionPane.showMessageDialog(null, "Se ha modificado el nombre del tipo", null, JOptionPane.INFORMATION_MESSAGE);
 
@@ -602,7 +583,6 @@ public class Consultas {
 			sesion.update(st);
 			trans.commit();
 			sesion.close();
-			sesionF.close();
 
 			JOptionPane.showMessageDialog(null,
 					"Se ha modificado el nombre del subtipo", null,
@@ -634,7 +614,6 @@ public class Consultas {
 		
 		trans.commit();
 		sesion.close();
-		sesionF.close();
 		
 		JOptionPane.showMessageDialog(null, "Se ha eliminado el componente", null, JOptionPane.INFORMATION_MESSAGE);
 

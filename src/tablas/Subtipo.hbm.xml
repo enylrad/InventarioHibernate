@@ -14,7 +14,7 @@
         <property name="nombre" type="string">
             <column name="nombre" length="100" />
         </property>
-        <set name="componentes" table="componente" inverse="true" lazy="true" fetch="select">
+        <set name="componentes" cascade="all" table="componente" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="cod_subtipo" />
             </key>

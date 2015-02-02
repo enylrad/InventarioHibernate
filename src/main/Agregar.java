@@ -3,10 +3,8 @@ package main;
 import javax.swing.JPanel;
 
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JFileChooser;
@@ -31,7 +29,6 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.JSpinner;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.Utilities;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -51,6 +48,8 @@ public class Agregar extends JPanel {
 	private String foto = ""; //Insertar imagen deseada
 	private JComboBox combo_tipo;
 	private JComboBox combo_subtipo;
+	private JButton btn_editar_sub;
+	private JButton btn_editar_tipo;
 
 	/**
 	 * Create the panel.
@@ -132,13 +131,13 @@ public class Agregar extends JPanel {
 
 				try {
 
-					String tipo = JOptionPane
-							.showInputDialog("Introduce el nuevo tipo de componentes");
+					String tipo = JOptionPane.showInputDialog("Introduce el nuevo tipo de componentes");
 
 					if (!tipo.equals("")) {
 
-						Consultas.añadirTipo(tipo);
+						Consultas.anyadirTipo(tipo);
 						renovarComboTipo();
+						btn_editar_tipo.setEnabled(true);
 
 					} else {
 
@@ -165,15 +164,15 @@ public class Agregar extends JPanel {
 
 				try {
 
-					String subtipo = JOptionPane
-							.showInputDialog("Introduce el nuevo subtipo de componentes del tipo: "
+					String subtipo = JOptionPane.showInputDialog("Introduce el nuevo subtipo de componentes del tipo: "
 									+ combo_tipo.getSelectedItem() + ".");
 
 					if (!subtipo.equals("")) {
 
-						Consultas.añadirSubtipo(subtipo, combo_tipo
+						Consultas.anyadirSubtipo(subtipo, combo_tipo
 								.getSelectedItem().toString());
 						renovarComboSubTipo();
+						btn_editar_sub.setEnabled(true);
 
 					} else {
 
@@ -260,49 +259,16 @@ public class Agregar extends JPanel {
 		lbl_foto.setBounds(30, 30, 46, 14);
 		add(lbl_foto);
 
-		JButton btn_añadir = new JButton("A\u00F1adir");
-		btn_añadir.addActionListener(new ActionListener() {
+		JButton btn_anyadir = new JButton("A\u00F1adir");
+		btn_anyadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (comprobacionesVacio()) {
-
-					String nombre = txt_nombre.getText();
-					Double precio_p = (Double) spin_precioP.getValue();
-					Double precio_c = (Double) spin_compra.getValue();
-					int stock = (Integer) spin_stock.getValue();
-					String desc = txt_desc.getText();
-					String sub_tipo = combo_subtipo.getSelectedItem()
-							.toString();
-
-					Date fecha = (Date) picker.getDate();
-					SimpleDateFormat formatter = new SimpleDateFormat(
-							"yyyy-MM-dd");
-					String fecha_compra = formatter.format(fecha);
-					try {
-						Consultas.añadirComponente(nombre, precio_p, precio_c,
-								stock, desc, fecha_compra, foto, sub_tipo);
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					JOptionPane.showMessageDialog(null,
-							"Se ha añadido el componente a la base de datos.",
-							"Guardado", JOptionPane.INFORMATION_MESSAGE);
-
-					volverBusqueda();
-
-				} else {
-
-					JOptionPane.showMessageDialog(null,
-							"Se deben rellenar todos los campos", "¡Atención!",
-							JOptionPane.WARNING_MESSAGE);
-
-				}
+				anyadir();
 
 			}
 		});
-		btn_añadir.setBounds(637, 469, 89, 23);
-		add(btn_añadir);
+		btn_anyadir.setBounds(637, 469, 89, 23);
+		add(btn_anyadir);
 
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
@@ -331,14 +297,13 @@ public class Agregar extends JPanel {
 		btnCancelar.setBounds(736, 469, 89, 23);
 		add(btnCancelar);
 		
-		JButton btn_editar_tipo = new JButton("Editar");
+		btn_editar_tipo = new JButton("Editar");
 		btn_editar_tipo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
 
-					String tipo = JOptionPane
-							.showInputDialog("Introduce el nuevo nombre que tendrá el tipo: " + combo_tipo.getSelectedItem());
+					String tipo = JOptionPane.showInputDialog("Introduce el nuevo nombre que tendrá el tipo: " + combo_tipo.getSelectedItem());
 
 					if (!tipo.equals("")) {
 						
@@ -362,9 +327,16 @@ public class Agregar extends JPanel {
 			}
 		});
 		btn_editar_tipo.setBounds(771, 26, 89, 23);
+		
+		if(combo_tipo.getSelectedItem() == null){
+			btn_editar_tipo.setEnabled(false);
+		}else{
+			btn_editar_tipo.setEnabled(true);
+		}
+		
 		add(btn_editar_tipo);
 		
-		JButton btn_editar_sub = new JButton("Editar");
+		btn_editar_sub = new JButton("Editar");
 		btn_editar_sub.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -395,6 +367,13 @@ public class Agregar extends JPanel {
 			}
 		});
 		btn_editar_sub.setBounds(771, 76, 89, 23);
+		
+		if(combo_subtipo.getSelectedItem() == null){
+			btn_editar_sub.setEnabled(false);
+		}else{
+			btn_editar_sub.setEnabled(true);
+		}
+		
 		add(btn_editar_sub);
 
 	}
@@ -432,6 +411,12 @@ public class Agregar extends JPanel {
 		for (int i = 0; i < tipos.length; i++) {
 			combo_tipo.addItem(tipos[i].toString());
 		}
+		
+		if(combo_tipo.getSelectedItem() == null){
+			btn_editar_tipo.setEnabled(false);
+		}else{
+			btn_editar_tipo.setEnabled(true);
+		}
 
 	}
 
@@ -444,6 +429,59 @@ public class Agregar extends JPanel {
 		for (int i = 0; i < subtipos.length; i++) {
 			combo_subtipo.addItem(subtipos[i].toString());
 		}
+		
+		if(combo_subtipo.getSelectedItem() == null){
+			btn_editar_sub.setEnabled(false);
+		}else{
+			btn_editar_sub.setEnabled(true);
+		}
 
+	}
+	
+	public void anyadir(){
+		
+		if (comprobacionesVacio()) {
+
+			String nombre = null;
+			Double precio_p = null;
+			Double precio_c = null;
+			int stock = 0;
+			String desc = null;
+			String sub_tipo = null;
+			
+			String fecha_compra = null;
+			
+			nombre = txt_nombre.getText();
+			precio_p = (Double) spin_precioP.getValue();
+			precio_c = (Double) spin_compra.getValue();
+			stock = (Integer) spin_stock.getValue();
+			desc = txt_desc.getText();
+			sub_tipo = combo_subtipo.getSelectedItem().toString();
+
+			Date fecha = (Date) picker.getDate();
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"yyyy-MM-dd");
+			fecha_compra = formatter.format(fecha);
+			try {
+				Consultas.anyadirComponente(nombre, precio_p, precio_c,
+						stock, desc, fecha_compra, foto, sub_tipo);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			JOptionPane.showMessageDialog(null,
+					"Se ha anyadido el componente a la base de datos.",
+					"Guardado", JOptionPane.INFORMATION_MESSAGE);
+
+			volverBusqueda();
+
+		} else {
+
+			JOptionPane.showMessageDialog(null,
+					"Se deben rellenar todos los campos", "¡Atención!",
+					JOptionPane.WARNING_MESSAGE);
+
+		}
+		
 	}
 }

@@ -1,5 +1,8 @@
 package tablas;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 // Generated 28-ene-2015 15:41:03 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
@@ -38,6 +41,7 @@ public class Tipo implements java.io.Serializable {
 		this.nombre = nombre;
 	}
 
+	@Cascade({CascadeType.ALL})
 	public Set<Subtipo> getSubtipos() {
 		return this.subtipos;
 	}
