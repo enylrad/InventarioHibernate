@@ -230,9 +230,6 @@ public class Busqueda extends JPanel {
 
 	public void mostrarTabla() {
 
-		modelo = null;
-		table = null;
-
 		modelo = new DefaultTableModel();
 		table = new JTable();
 
@@ -250,10 +247,14 @@ public class Busqueda extends JPanel {
 		modelo.addColumn("Subtipo");
 
 		try{
+			
 			Integer.parseInt(text_busqueda.getText());
 			Consultas.buscar(modelo, text_busqueda, combo_tipo, true);
+			
 		}catch(NumberFormatException n){
+			
 			Consultas.buscar(modelo, text_busqueda, combo_tipo, false);
+			
 		}
 
 		// Para que no se puedan modificar los campos
