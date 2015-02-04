@@ -35,6 +35,9 @@ public class Consultas {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
+		
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
 
 		String texto_busqueda = "";
 		String texto_tipo = "";
@@ -113,6 +116,9 @@ public class Consultas {
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
 
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
+
 		Query cons = sesion.createQuery("FROM Tipo");
 
 		List<Object> filas = cons.list();
@@ -157,6 +163,9 @@ public class Consultas {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
+
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
 
 		Query cons = sesion.createQuery("FROM Subtipo "
 				+ "WHERE tipo.nombre LIKE '" + tipo + "'");
@@ -284,6 +293,9 @@ public class Consultas {
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
 
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
+
 		Subtipo subtipo = new Subtipo();
 
 		Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '" + nombre +"'");
@@ -378,6 +390,9 @@ public class Consultas {
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
 
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
+
 		Query cons = sesion.createQuery("FROM Tipo WHERE nombre LIKE '"
 				+ nombre + "'");
 
@@ -406,6 +421,9 @@ public class Consultas {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
+
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
 
 		Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '"
 				+ nombre + "'");
@@ -436,6 +454,9 @@ public class Consultas {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
+
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
 
 		Query cons = sesion.createQuery("FROM Tipo WHERE nombre LIKE '"
 				+ nombre + "'");
@@ -472,6 +493,9 @@ public class Consultas {
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
 
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
+
 		Query cons = sesion.createQuery("FROM Subtipo WHERE nombre LIKE '"
 				+ nombre + "'");
 
@@ -506,6 +530,9 @@ public class Consultas {
 
 		SessionFactory sesionF = SessionFactoryUtil.getSessionFactory();
 		Session sesion = sesionF.openSession();
+
+		Transaction trans = sesion.beginTransaction();
+		trans.commit();
 
 		Componente c = new Componente();
 
